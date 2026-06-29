@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ */
         body {
             background-color: #1a1a1a;
             color: #ffffff;
@@ -29,6 +30,7 @@
             text-align: center;
         }
 
+        /* УНИВЕРСАЛЬНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК (by TimTrayler) */
         button, .btn-style {
             --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a;
             --accent: fuchsia;
@@ -46,8 +48,6 @@
             font-family: monospace;
             font-size: 15px;
             margin-top: 20px;
-            width: 100%;
-            max-width: 280px;
         }
         button:hover, .btn-style:hover { box-shadow: var(--hover-shadows); }
         button:active, .btn-style:active {
@@ -56,6 +56,7 @@
             transform: scale(0.95);
         }
 
+        /* СТИЛЬ СТРОКИ ВВОДА (by garerim) */
         .input {
             margin: 15px auto;
             background: none;
@@ -70,9 +71,11 @@
             color: #fff;
             text-align: center;
             display: block;
-            box-sizing: border-box;
         }
 
+        /* ЭКРАН 1: СТИЛИ ДЛЯ ШАПКИ И РОБОТА БЛИНКИ */
+        #screen-welcome { display: flex; flex-direction: column; align-items: center; }
+        
         .brand-header {
             display: flex;
             align-items: center;
@@ -87,8 +90,8 @@
             text-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
             letter-spacing: 2px;
         }
-
-        /* ПОЛНЫЙ ОРИГИНАЛЬНЫЙ БЛИНКИ (by BlackisPlay) */
+        
+        /* Блинки из пакмана (by BlackisPlay) */
         #ghost { position: relative; scale: 0.35; width: 140px; height: 140px; margin: -40px; }
         #red {
             animation: upNDown infinite 0.5s; position: relative; width: 140px; height: 140px;
@@ -123,14 +126,14 @@
             100% { top: 0px; }
         }
 
-        /* ОКНО ТЕРМИНАЛА ДЛЯ ИМИТАЦИИ СОРТИРОВКИ ДАННЫХ */
+        /* ТЕРМИНАЛ ДЛЯ РЕЗУЛЬТАТОВ OSINT.PY */
         .output-box {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background: #000;
             border: 1px dashed #00ff66;
             padding: 15px;
-            min-height: 120px;
+            min-height: 140px;
             white-space: pre-wrap;
             font-size: 14px;
             color: #00ff66;
@@ -140,6 +143,7 @@
             margin-top: 25px;
             max-height: 250px;
             overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
         }
         .system-log { color: #888; }
         .success-log { color: #ffff00; font-weight: bold; }
@@ -148,25 +152,41 @@
 <body>
 
 <div class="main-container">
-    <div class="brand-header">
-        <div id="ghost">
-            <div id="red">
-                <div class="redBg" style="grid-area: top0;"></div><div class="redBg" style="grid-area: top1;"></div><div class="redBg" style="grid-area: top2;"></div>
-                <div class="redBg" style="grid-area: top3;"></div><div class="redBg" style="grid-area: top4;"></div><div class="redBg" style="grid-area: top5;"></div>
-                <div class="redBg" style="grid-area: top6;"></div><div class="redBg" style="grid-area: top7;"></div><div class="redBg" style="grid-area: top8;"></div>
-                <div class="redBg" style="grid-area: top9;"></div><div class="redBg" style="grid-area: topA;"></div><div class="redBg" style="grid-area: topB;"></div>
-                <div class="redBg" style="grid-area: topC;"></div>
-                <div class="eyeLeft"></div><div class="pupilLeft"></div><div class="eyeRight"></div><div class="pupilRight"></div>
-                <div class="whiteBg" style="grid-area: bot1;"></div><div class="whiteBg" style="grid-area: bot2;"></div><div class="whiteBg" style="grid-area: bot3;"></div>
-            </div>
-        </div>
-        <div class="brand-title">bloodthirsty</div>
-    </div>
     
+    <div id="screen-welcome">
+        <div class="brand-header">
+            <div id="ghost">
+                <div id="red">
+                    <div class="redBg" style="grid-area: top0;"></div>
+                    <div class="redBg" style="grid-area: top1;"></div>
+                    <div class="redBg" style="grid-area: top2;"></div>
+                    <div class="redBg" style="grid-area: top3;"></div>
+                    <div class="redBg" style="grid-area: top4;"></div>
+                    <div class="redBg" style="grid-area: top5;"></div>
+                    <div class="redBg" style="grid-area: top6;"></div>
+                    <div class="redBg" style="grid-area: top7;"></div>
+                    <div class="redBg" style="grid-area: top8;"></div>
+                    <div class="redBg" style="grid-area: top9;"></div>
+                    <div class="redBg" style="grid-area: topA;"></div>
+                    <div class="redBg" style="grid-area: topB;"></div>
+                    <div class="redBg" style="grid-area: topC;"></div>
+                    <div class="eyeLeft"></div>
+                    <div class="pupilLeft"></div>
+                    <div class="eyeRight"></div>
+                    <div class="pupilRight"></div>
+                    <div class="whiteBg" style="grid-area: bot1;"></div>
+                    <div class="whiteBg" style="grid-area: bot2;"></div>
+                    <div class="whiteBg" style="grid-area: bot3;"></div>
+                </div>
+            </div>
+            <div class="brand-title">bloodthirsty</div>
+        </div>
+    </div>
+
     <input type="text" id="targetInput" class="input" placeholder="Введите цель...">
     <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
 
-    <div class="output-box" id="terminalOutput">_ Система готова к работе. Ожидание ввода цели...</div>
+    <div class="output-box" id="terminalOutput">_ Система готова к работе. Ожидание ввода...</div>
 </div>
 
 <script>
@@ -179,14 +199,14 @@ async function startOsintSearch() {
     const output = document.getElementById('terminalOutput');
     
     if (!input) {
-        output.innerHTML = "<span style='color: #ff0055;'>[!] Ошибка: Введите цель.</span>";
+        output.innerHTML = "<span style='color: #ff0055;'>[!] Ошибка: Поле ввода пустое.</span>";
         return;
     }
 
     output.innerHTML = "";
     
     const logs = [
-        `[+] Инициализация модулей osint.py...`,
+        `[+] Запуск osint.py...`,
         `[~] Подключение к базам данных...`,
         `[*] Анализ цели: ${input}`,
         `[~] Поиск совпадений в архивах утечек...`
@@ -210,14 +230,14 @@ async function startOsintSearch() {
 
     output.innerHTML += `
 <hr style="border-color: #00ff66; border-style: dashed;">
-<div class="success-log">🎯 ДАННЫЕ НАЙДЕНЫ В БАЗЕ:</div>
+<div class="success-log">🎯 ДАННЫЕ ИЗ БАЗЫ OSINT.PY:</div>
 [•] Страна: ${country}
 [•] Город: ${fakeCity}
 [•] Оператор: ${operator}
 [•] Возраст: ~${fakeAge} лет
-[•] Статус аккаунта: Активен
+[•] Статус: Проверен
 ----------------------------------------
-<span style="color: #ffff00;">[+] osint.py успешно завершил работу.</span>`;
+<span style="color: #ffff00;">[+] osint.py завершил работу успешно.</span>`;
     
     output.scrollTop = output.scrollHeight;
 }
