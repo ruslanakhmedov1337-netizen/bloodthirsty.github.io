@@ -73,8 +73,13 @@
             display: block;
         }
 
-        /* ЭКРАН 1: СТИЛИ ДЛЯ ШАПКИ И РОБОТА БЛИНКИ */
-        #screen-welcome { display: flex; flex-direction: column; align-items: center; }
+        /* ЭКРАН 1: ШАПКА И РОБОТ БЛИНКИ */
+        #screen-welcome { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%;
+        }
         
         .brand-header {
             display: flex;
@@ -126,22 +131,28 @@
             100% { top: 0px; }
         }
 
-        /* ТЕРМИНАЛ ДЛЯ РЕЗУЛЬТАТОВ OSINT.PY */
+        /* ЭКРАН 2: ТЕРМИНАЛ (Изначально скрыт) */
+        #screen-terminal {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .output-box {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             background: #000;
             border: 1px dashed #00ff66;
             padding: 15px;
-            min-height: 140px;
+            min-height: 180px;
             white-space: pre-wrap;
             font-size: 14px;
             color: #00ff66;
             text-align: left;
             box-sizing: border-box;
             border-radius: 8px;
-            margin-top: 25px;
-            max-height: 250px;
+            max-height: 300px;
             overflow-y: auto;
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
         }
@@ -153,6 +164,7 @@
 
 <div class="main-container">
     
+    <!-- ЭКРАН 1: ОРИГИНАЛЬНОЕ МЕНЮ С БЛИНКИ, ВВОДОМ И КНОПКОЙ -->
     <div id="screen-welcome">
         <div class="brand-header">
             <div id="ghost">
@@ -170,23 +182,24 @@
                     <div class="redBg" style="grid-area: topA;"></div>
                     <div class="redBg" style="grid-area: topB;"></div>
                     <div class="redBg" style="grid-area: topC;"></div>
-                    <div class="eyeLeft"></div>
-                    <div class="pupilLeft"></div>
-                    <div class="eyeRight"></div>
-                    <div class="pupilRight"></div>
-                    <div class="whiteBg" style="grid-area: bot1;"></div>
-                    <div class="whiteBg" style="grid-area: bot2;"></div>
-                    <div class="whiteBg" style="grid-area: bot3;"></div>
+                    <div class="eyeLeft"></div><div class="pupilLeft"></div><div class="eyeRight"></div><div class="pupilRight"></div>
+                    <div class="whiteBg" style="grid-area: bot1;"></div><div class="whiteBg" style="grid-area: bot2;"></div><div class="whiteBg" style="grid-area: bot3;"></div>
                 </div>
             </div>
             <div class="brand-title">bloodthirsty</div>
         </div>
+
+        <input type="text" id="targetInput" class="input" placeholder="Введите цель...">
+        <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
     </div>
 
-    <input type="text" id="targetInput" class="input" placeholder="Введите цель...">
-    <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
+    <!-- ЭКРАН 2: ТЕРМИНАЛ ДЛЯ РЕЗУЛЬТАТОВ (ОТКРЫВАЕТСЯ ПО КНОПКЕ) -->
+    <div id="screen-terminal">
+        <div class="brand-title" style="font-size: 20px; margin-bottom: 15px;">🩸 OSINT TERMINAL</div>
+        <div class="output-box" id="terminalOutput"></div>
+        <button onclick="backToMenu()" style="font-size: 12px; padding: 0.8em 1.5em;">НАЗАД В МЕНЮ</button>
+    </div>
 
-    <div class="output-box" id="terminalOutput">_ Система готова к работе. Ожидание ввода...</div>
 </div>
 
 <script>
@@ -196,20 +209,25 @@ function sleep(ms) {
 
 async function startOsintSearch() {
     const input = document.getElementById('targetInput').value.trim();
+    const welcomeScreen = document.getElementById('screen-welcome');
+    const terminalScreen = document.getElementById('screen-terminal');
     const output = document.getElementById('terminalOutput');
     
     if (!input) {
-        output.innerHTML = "<span style='color: #ff0055;'>[!] Ошибка: Поле ввода пустое.</span>";
+        alert("Ошибка: Поле ввода пустое!");
         return;
     }
 
+    // Переключаем экраны как в твоем меню
+    welcomeScreen.style.display = 'none';
+    terminalScreen.style.display = 'flex';
     output.innerHTML = "";
     
     const logs = [
-        `[+] Запуск osint.py...`,
-        `[~] Подключение к базам данных...`,
-        `[*] Анализ цели: ${input}`,
-        `[~] Поиск совпадений в архивах утечек...`
+        `[+] Запуск модулей osint.py...`,
+        `[~] Подключение к защищенным базам данных...`,
+        `[*] Поиск совпадений по цели: ${input}`,
+        `[~] Сортировка полученных логов утечек...`
     ];
 
     for (let log of logs) {
@@ -230,16 +248,22 @@ async function startOsintSearch() {
 
     output.innerHTML += `
 <hr style="border-color: #00ff66; border-style: dashed;">
-<div class="success-log">🎯 ДАННЫЕ ИЗ БАЗЫ OSINT.PY:</div>
-[•] Страна: ${country}
-[•] Город: ${fakeCity}
-[•] Оператор: ${operator}
-[•] Возраст: ~${fakeAge} лет
-[•] Статус: Проверен
+<div class="success-log">🎯 ДАННЫЕ НАЙДЕНЫ В БАЗЕ OSINT.PY:</div>
 ----------------------------------------
-<span style="color: #ffff00;">[+] osint.py завершил работу успешно.</span>`;
+[•] Ввод: ${input}
+[•] Геолокация: ${country} (${fakeCity})
+[•] Оператор/Провайдер: ${operator}
+[•] Возраст по базам: ~${fakeAge} лет
+[•] Статус: Проверен успешно
+----------------------------------------
+<span style="color: #ffff00;">[+] Скрипт завершил работу без ошибок.</span>`;
     
     output.scrollTop = output.scrollHeight;
+}
+
+function backToMenu() {
+    document.getElementById('screen-terminal').style.display = 'none';
+    document.getElementById('screen-welcome').style.display = 'flex';
 }
 </script>
 
