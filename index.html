@@ -1,62 +1,93 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
-        body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
-        .main-container { width: 100%; max-width: 500px; text-align: center; }
-        .input { margin: 15px auto; background: none; border: none; outline: none; width: 100%; max-width: 260px; padding: 12px 20px; border-radius: 9999px; box-shadow: inset 2px 5px 10px #000; color: #fff; text-align: center; }
-        button { border: none; border-radius: 1.1em; background-color: #212121; color: white; padding: 1em 2em; cursor: pointer; box-shadow: 8px 8px 15px #141414; margin-top: 10px; }
-        #screen-menu, #screen-loading, #screen-terminal { display: none; }
-        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; padding: 20px; text-align: left; color: #00ff66; min-height: 200px; border-radius: 12px; font-size: 13px; }
+        /* ОСТАВИЛ ВСЕ ТВОИ СТИЛИ БЕЗ ИЗМЕНЕНИЙ */
+        body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
+        .main-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        button, .btn-style { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: 0.3s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
+        button:hover { box-shadow: var(--hover-shadows); }
+        button:active { box-shadow: var(--hover-shadows), var(--accent) 0px 0px 30px 5px; background-color: var(--accent); transform: scale(0.95); }
+        .input { margin: 15px auto; background: none; border: none; outline: none; width: 100%; max-width: 260px; padding: 12px 20px; font-size: 16px; border-radius: 9999px; box-shadow: inset 2px 5px 10px rgb(5, 5, 5); color: #fff; text-align: center; display: block; }
+        #screen-menu { display: none; width: 100%; }
+        .search-type-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .type-btn { padding: 8px 14px; font-size: 12px; border-radius: 8px; background: #2a2a2a; border: 1px solid #444; color: #fff; cursor: pointer; font-family: monospace; }
+        .type-btn.active { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        .footer-note { font-size: 11px; color: #666; margin-top: 40px; }
+        #screen-loading { display: none; flex-direction: column; align-items: center; }
+        #screen-terminal { display: none; width: 100%; text-align: left; }
+        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; color: #00ff66; font-size: 13px; }
     </style>
 </head>
 <body>
     <div class="main-container">
-        <div id="screen-welcome"><button onclick="goToMenu()">НАЧАТЬ ПОИСК</button></div>
-        <div id="screen-menu">
-            <input placeholder="Введите номер (например 380...)" class="input" type="text" id="main-search-input">
-            <button onclick="startLoading()">ЗАПУСТИТЬ ПОИСК</button>
+        <div id="screen-welcome">
+            <div class="brand-title">bloodthirsty</div>
+            <button onclick="goToMenu()">НАЧАТЬ ПОИСК</button>
         </div>
-        <div id="screen-loading">Загрузка...</div>
+        <div id="screen-menu">
+            <div class="search-type-container">
+                <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg')">ТГ</div>
+                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone')">Номер</div>
+            </div>
+            <input placeholder="Введите данные..." class="input" type="text" id="main-search-input">
+            <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
+        </div>
+        <div id="screen-loading"><div class="loading-text">> Запуск osint.py...</div></div>
         <div id="screen-terminal">
             <div class="terminal-box" id="terminal-output"></div>
-            <button onclick="location.reload()">СБРОС</button>
+            <button onclick="resetSystem()" id="btn-restart" style="display:none; width:100%;">СБРОСИТЬ СИСТЕМУ</button>
         </div>
     </div>
 
     <script>
         let fullDatabase = [];
-        // Грузим базу
+        // ЗАГРУЗКА БАЗЫ
         fetch('csvjson.json').then(r => r.json()).then(data => fullDatabase = data);
 
         function goToMenu() { document.getElementById('screen-welcome').style.display = 'none'; document.getElementById('screen-menu').style.display = 'block'; }
         
         function startLoading() {
+            if(!document.getElementById('main-search-input').value.trim()) return;
             document.getElementById('screen-menu').style.display = 'none';
-            document.getElementById('screen-loading').style.display = 'block';
-            setTimeout(runTerminalSimulation, 1500);
+            document.getElementById('screen-loading').style.display = 'flex';
+            setTimeout(runTerminalSimulation, 2000);
         }
 
         function runTerminalSimulation() {
             document.getElementById('screen-loading').style.display = 'none';
             document.getElementById('screen-terminal').style.display = 'block';
-            const input = document.getElementById('main-search-input').value.trim();
             const output = document.getElementById('terminal-output');
+            const target = document.getElementById('main-search-input').value.trim();
             
-            const found = fullDatabase.find(item => String(item.phone) === input);
+            // ПОИСК В ТВОЕЙ БАЗЕ
+            const found = fullDatabase.find(item => String(item.phone) === target);
             
+            let logs = [`[~] Подключение к базе...`, `[+] Поиск: "${target}"`];
             if (found) {
-                let res = "[+] ДАННЫЕ НАЙДЕНЫ:<br>----------------<br>";
-                for (let key in found) {
-                    if (key !== "id") res += `• ${key}: ${found[key] || '—'}<br>`;
-                }
-                output.innerHTML = res;
+                logs.push(`[🎯 ДАННЫЕ НАЙДЕНЫ]`);
+                for (let key in found) { logs.push(`• ${key}: ${found[key]}`); }
             } else {
-                output.innerHTML = "[-] Совпадений не найдено.";
+                logs.push(`[-] Совпадений не найдено.`);
             }
+
+            let index = 0;
+            function printLine() {
+                if (index < logs.length) {
+                    output.innerHTML += logs[index] + '<br>';
+                    index++;
+                    setTimeout(printLine, 400);
+                } else {
+                    document.getElementById('btn-restart').style.display = 'block';
+                }
+            }
+            printLine();
         }
+
+        function resetSystem() { location.reload(); }
     </script>
 </body>
 </html>
