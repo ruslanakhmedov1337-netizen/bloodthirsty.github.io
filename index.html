@@ -133,7 +133,7 @@
         .type-btn.active { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
         .footer-note { font-size: 11px; color: #666; margin-top: 40px; line-height: 1.4; padding: 0 20px; }
 
-        /* ЭКРАН 3: ЗАГРУЗКА (by dovatgabriel) */
+        /* ЭКРАН 3: ЗАГРУЗКА */
         #screen-loading { display: none; flex-direction: column; align-items: center; }
         .newtons-cradle {
             --uib-size: 50px; --uib-speed: 1.2s; --uib-color: fuchsia;
@@ -222,7 +222,6 @@
     <script>
         let currentType = 'tg';
 
-        // Переключение типов поиска во втором меню
         function changeSearchType(type, placeholderText) {
             currentType = type;
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
@@ -231,13 +230,11 @@
             document.getElementById('main-search-input').value = '';
         }
 
-        // Переход с 1 на 2 экран
         function goToMenu() {
             document.getElementById('screen-welcome').style.display = 'none';
             document.getElementById('screen-menu').style.display = 'block';
         }
 
-        // Переход со 2 на 3 экран (загрузка)
         function startLoading() {
             const val = document.getElementById('main-search-input').value;
             if(!val.trim()) {
@@ -247,29 +244,35 @@
             document.getElementById('screen-menu').style.display = 'none';
             document.getElementById('screen-loading').style.display = 'flex';
 
-            // Через 3 секунды загрузка убирается и запускается симуляция терминала
             setTimeout(runTerminalSimulation, 3000);
         }
 
-        // Эмуляция вывода логов скрипта osint.py с генерацией базы данных
         function runTerminalSimulation() {
             document.getElementById('screen-loading').style.display = 'none';
             document.getElementById('screen-terminal').style.display = 'block';
 
             const output = document.getElementById('terminal-output');
             const targetData = document.getElementById('main-search-input').value;
-            output.innerHTML = ''; // Очистка
+            output.innerHTML = ''; 
             
-            // Динамические переменные из базы данных твоего софта
             let country = "Определяется...";
             let operator = "Глобальный поиск";
             let fakeCity = ["Москва", "Санкт-Петербург", "Краснодар", "Новосибирск", "Минск"][Math.floor(Math.random() * 5)];
             let fakeAge = Math.floor(Math.random() * (35 - 18 + 1)) + 18;
             
-            // Если ввели номер телефона, выставляем логичные данные
-            if (currentType === 'phone' || targetData.replace(/[^0-9]/g, '').length >= 10) {
-                country = "Российская Федерация 🇷🇺";
-                operator = ["МТС", "Билайн", "МегаФон", "Теле2"][Math.floor(Math.random() * 4)];
+            // Чистим ввод от лишних знаков, чтобы проверять только цифры
+            const cleanNumbers = targetData.replace(/[^0-9]/g, '');
+
+            if (currentType === 'phone' || cleanNumbers.length >= 9) {
+                // ПРОВЕРКА НА УКРАИНУ (+380 или просто 380)
+                if (targetData.includes('+380') || targetData.startsWith('380') || cleanNumbers.startsWith('380')) {
+                    country = "Украина 🇺🇦";
+                    operator = ["Киевстар (Kyivstar)", "Vodafone", "lifecell"][Math.floor(Math.random() * 3)];
+                    fakeCity = ["Киев", "Харьков", "Одесса", "Днепр", "Львов"][Math.floor(Math.random() * 5)];
+                } else {
+                    country = "Российская Федерация 🇷🇺";
+                    operator = ["МТС", "Билайн", "МегаФон", "Теле2"][Math.floor(Math.random() * 4)];
+                }
             } else if (currentType === 'tg') {
                 country = "Telegram Сеть";
                 operator = "Протокол MTProto";
@@ -278,7 +281,6 @@
                 operator = "Локальные реестры";
             }
 
-            // Строки логов, которые будут печататься по очереди
             const logs = [
                 `[~] Подключение к базе данных osint_base.db...`,
                 `[+] Соединение установлено. Поиск совпадений для: "${targetData}"`,
@@ -302,17 +304,14 @@
                 if (index < logs.length) {
                     output.innerHTML += logs[index] + '<br>';
                     index++;
-                    setTimeout(printLine, 600); // Скорость печати строк
+                    setTimeout(printLine, 600); 
                 } else {
-                    // Когда всё напечаталось, показываем кнопку сброса
-                    document.getElementById('btn-restart').style.style = 'block';
                     document.getElementById('btn-restart').style.display = 'block';
                 }
             }
             printLine();
         }
 
-        // Полный сброс, чтобы запустить заново
         function resetSystem() {
             document.getElementById('main-search-input').value = '';
             document.getElementById('btn-restart').style.display = 'none';
