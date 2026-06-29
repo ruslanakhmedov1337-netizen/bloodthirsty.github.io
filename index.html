@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ ИЗ ПЕРВОЙ ВЕРСИИ */
         body {
-            background-color: #0d0d0d;
-            color: #00ff66;
+            background-color: #1a1a1a;
+            color: #ffffff;
             font-family: 'Courier New', monospace;
             display: flex;
             justify-content: center;
@@ -16,153 +17,85 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
-        .terminal {
+
+        .main-container {
             width: 100%;
-            max-width: 600px;
-            background: #151515;
-            border: 1px solid #00ff66;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
-        }
-        .header {
-            text-align: center;
-            border-bottom: 1px solid #00ff66;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #ff0055;
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
-        }
-        .input-group {
+            max-width: 500px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        input {
-            background: #222;
-            border: 1px solid #00ff66;
-            padding: 12px;
-            color: #fff;
-            font-family: monospace;
-            font-size: 16px;
-            border-radius: 4px;
-            outline: none;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }
-        button {
-            background: #00ff66;
-            color: #000;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
+
+        /* УНИВЕРСАЛЬНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК (by TimTrayler) */
+        button, .btn-style {
+            --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a;
+            --accent: fuchsia;
             font-weight: bold;
-            font-family: monospace;
+            letter-spacing: 0.1em;
+            border: none;
+            border-radius: 1.1em;
+            background-color: #212121;
             cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            color: white;
+            padding: 1em 2em;
+            transition: box-shadow ease-in-out 0.3s, background-color ease-in-out 0.1s,
+              letter-spacing ease-in-out 0.1s, transform ease-in-out 0.1s;
+            box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828;
+            font-family: monospace;
+            font-size: 15px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 280px;
         }
-        button:hover {
-            background: #ff0055;
+        button:hover, .btn-style:hover { box-shadow: var(--hover-shadows); }
+        button:active, .btn-style:active {
+            box-shadow: var(--hover-shadows), var(--accent) 0px 0px 30px 5px;
+            background-color: var(--accent);
+            transform: scale(0.95);
+        }
+
+        /* СТИЛЬ СТРОКИ ВВОДА (by garerim) */
+        .input {
+            margin: 15px auto;
+            background: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            max-width: 260px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 9999px;
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
             color: #fff;
-            box-shadow: 0 0 15px #ff0055;
+            text-align: center;
+            display: block;
+            box-sizing: border-box;
         }
-        .output-box {
-            background: #000;
-            border: 1px dashed #00ff66;
-            padding: 15px;
-            min-height: 150px;
-            white-space: pre-wrap;
-            font-size: 14px;
-            color: #00ff66;
-            max-height: 300px;
-            overflow-y: auto;
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
         }
-        .system-log { color: #888; }
-        .success-log { color: #ffff00; font-weight: bold; }
-    </style>
-</head>
-<body>
+        .brand-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff0055;
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+            letter-spacing: 2px;
+        }
 
-<div class="terminal">
-    <div class="header">🩸 bloodthirsty // OSINT SYSTEM v2.0</div>
-    
-    <div class="input-group">
-        <input type="text" id="targetInput" placeholder="Введите телефон, ник или ID...">
-        <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
-    </div>
-
-    <div class="output-box" id="terminalOutput">_ Ожидание ввода цели...</div>
-</div>
-
-<script>
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function startOsintSearch() {
-    const input = document.getElementById('targetInput').value.trim();
-    const output = document.getElementById('terminalOutput');
-    
-    if (!input) {
-        output.innerHTML = "<span style='color: #ff0055;'>[!] Ошибка: Поле ввода пустое.</span>";
-        return;
-    }
-
-    output.innerHTML = "";
-    
-    // Эмуляция загрузки модулей точно как в твоем osint.py
-    const logs = [
-        `[+] Инициализация модулей osint.py...`,
-        `[+] Подключение к базам данных заняло 0.43 сек.`,
-        `[*] Поиск по цели: ${input}`,
-        `[~] Сканирование открытых источников (РФ/СНГ)...`,
-        `[~] Проверка привязанных соцсетей (ТГ, ВК, Инста)...`,
-        `[~] Запрос к архивам утечек паролей...`
-    ];
-
-    for (let log of logs) {
-        output.innerHTML += `<div class="system-log">${log}</div>`;
-        output.scrollTop = output.scrollHeight;
-        await sleep(600);
-    }
-
-    await sleep(1000);
-
-    // Логика генерации данных на основе ввода (как в твоем скрипте)
-    let country = "Определяется...";
-    let operator = "Поиск...";
-    let fakeCity = ["Москва", "Санкт-Петербург", "Краснодар", "Новосибирск", "Екатеринбург", "Минск"][Math.floor(Math.random() * 6)];
-    let fakeAge = Math.floor(Math.random() * (35 - 18 + 1)) + 18;
-    
-    if (input.includes('+7') || input.startsWith('8')) {
-        country = "Российская Федерация 🇷🇺";
-        operator = ["МТС", "Билайн", "МегаФон", "Теле2", "Тинькофф Мобайл"][Math.floor(Math.random() * 5)];
-    } else {
-        country = "СНГ / Международный формат";
-        operator = "Глобальный провайдер";
-    }
-
-    // Финальный вывод структуры данных из osint.py
-    output.innerHTML += `
-<hr style="border-color: #00ff66;">
-<div class="success-log">🎯 ДАННЫЕ НАЙДЕНЫ В БАЗЕ:</div>
-----------------------------------------
-[•] Страна: ${country}
-[•] Регион/Город: ${fakeCity}
-[•] Провайдер/Оператор: ${operator}
-[•] Возраст владельца (приблиз.): ${fakeAge} лет
-[•] Статус аккаунта: Активен
-[•] Найдено совпадений в утечках: ${Math.floor(Math.random() * 4) + 1}
-----------------------------------------
-<span style="color: #ffff00;">[+] Скрипт osint.py успешно завершил работу.</span>`;
-    
-    output.scrollTop = output.scrollHeight;
-}
-</script>
-
-</body>
-</html>
+        /* АНИМАЦИЯ БЛИНКИ (by BlackisPlay) */
+        #ghost { position: relative; scale: 0.35; width: 140px; height: 140px; margin: -40px; }
+        #red {
+            animation: upNDown infinite 0.5s; position: relative; width: 140px; height: 140px;
+            display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(14, 1fr);
+            grid-template-areas:
+            "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14"
+            "b1 bNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
