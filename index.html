@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
-        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ ИЗ ПЕРВОЙ ВЕРСИИ */
         body {
             background-color: #1a1a1a;
             color: #ffffff;
@@ -30,7 +29,6 @@
             text-align: center;
         }
 
-        /* УНИВЕРСАЛЬНЫЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК (by TimTrayler) */
         button, .btn-style {
             --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a;
             --accent: fuchsia;
@@ -58,7 +56,6 @@
             transform: scale(0.95);
         }
 
-        /* СТИЛЬ СТРОКИ ВВОДА (by garerim) */
         .input {
             margin: 15px auto;
             background: none;
@@ -91,11 +88,140 @@
             letter-spacing: 2px;
         }
 
-        /* АНИМАЦИЯ БЛИНКИ (by BlackisPlay) */
+        /* ПОЛНЫЙ ОРИГИНАЛЬНЫЙ БЛИНКИ (by BlackisPlay) */
         #ghost { position: relative; scale: 0.35; width: 140px; height: 140px; margin: -40px; }
         #red {
             animation: upNDown infinite 0.5s; position: relative; width: 140px; height: 140px;
             display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(14, 1fr);
             grid-template-areas:
             "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14"
-            "b1 bNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+            "b1 b2 b3 b4 top1 top1 top1 top1 top1 top1 b11 b12 b13 b14"
+            "c1 c2 c3 top2 top2 top2 top2 top2 top2 top2 top2 c12 c13 c14"
+            "d1 d2 top3 top3 eye1L eye1R top3 top3 eye2L eye2R top3 top3 d13 d14"
+            "e1 e2 top4 top4 eye1L eye1R top4 top4 eye2L eye2R top4 top4 e13 e14"
+            "f1 f2 top5 top5 top5 top5 top5 top5 top5 top5 top5 top5 f13 f14"
+            "g1 g2 top6 top6 top6 top6 top6 top6 top6 top6 top6 top6 g13 g14"
+            "h1 h2 top7 top7 top7 top7 top7 top7 top7 top7 top7 top7 h13 h14"
+            "i1 i2 top8 top8 top8 top8 top8 top8 top8 top8 top8 top8 i13 i14"
+            "j1 j2 top9 top9 top9 top9 top9 top9 top9 top9 top9 top9 j13 j14"
+            "k1 k2 topA bot1 bot1 topA topA bot2 bot2 topA topA bot3 bot3 k14"
+            "l1 topB topB bot1 bot1 topB bot2 bot2 topB bot3 bot3 topB topB l14"
+            "m1 topC m3 bot1 m5 topC m7 bot2 m9 topC m11 bot3 m13 m14"
+            "n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13 n14";
+        }
+        .redBg { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
+        .whiteBg { background-color: #ffffff; }
+        .blueBg { background-color: #2b2bff; }
+        .eyeLeft { grid-area: eye1L; background-color: #ffffff; border-radius: 30% 30% 0 0; }
+        .eyeRight { grid-area: eye2L; background-color: #ffffff; border-radius: 30% 30% 0 0; }
+        .pupilLeft { grid-area: eye1R; background-color: #2b2bff; border-radius: 0 0 40% 40%; }
+        .pupilRight { grid-area: eye2R; background-color: #2b2bff; border-radius: 0 0 40% 40%; }
+
+        @keyframes upNDown {
+            0% { top: 0px; }
+            50% { top: -8px; }
+            100% { top: 0px; }
+        }
+
+        /* ОКНО ТЕРМИНАЛА ДЛЯ ИМИТАЦИИ СОРТИРОВКИ ДАННЫХ */
+        .output-box {
+            width: 100%;
+            max-width: 400px;
+            background: #000;
+            border: 1px dashed #00ff66;
+            padding: 15px;
+            min-height: 120px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            color: #00ff66;
+            text-align: left;
+            box-sizing: border-box;
+            border-radius: 8px;
+            margin-top: 25px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .system-log { color: #888; }
+        .success-log { color: #ffff00; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="brand-header">
+        <div id="ghost">
+            <div id="red">
+                <div class="redBg" style="grid-area: top0;"></div><div class="redBg" style="grid-area: top1;"></div><div class="redBg" style="grid-area: top2;"></div>
+                <div class="redBg" style="grid-area: top3;"></div><div class="redBg" style="grid-area: top4;"></div><div class="redBg" style="grid-area: top5;"></div>
+                <div class="redBg" style="grid-area: top6;"></div><div class="redBg" style="grid-area: top7;"></div><div class="redBg" style="grid-area: top8;"></div>
+                <div class="redBg" style="grid-area: top9;"></div><div class="redBg" style="grid-area: topA;"></div><div class="redBg" style="grid-area: topB;"></div>
+                <div class="redBg" style="grid-area: topC;"></div>
+                <div class="eyeLeft"></div><div class="pupilLeft"></div><div class="eyeRight"></div><div class="pupilRight"></div>
+                <div class="whiteBg" style="grid-area: bot1;"></div><div class="whiteBg" style="grid-area: bot2;"></div><div class="whiteBg" style="grid-area: bot3;"></div>
+            </div>
+        </div>
+        <div class="brand-title">bloodthirsty</div>
+    </div>
+    
+    <input type="text" id="targetInput" class="input" placeholder="Введите цель...">
+    <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
+
+    <div class="output-box" id="terminalOutput">_ Система готова к работе. Ожидание ввода цели...</div>
+</div>
+
+<script>
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function startOsintSearch() {
+    const input = document.getElementById('targetInput').value.trim();
+    const output = document.getElementById('terminalOutput');
+    
+    if (!input) {
+        output.innerHTML = "<span style='color: #ff0055;'>[!] Ошибка: Введите цель.</span>";
+        return;
+    }
+
+    output.innerHTML = "";
+    
+    const logs = [
+        `[+] Инициализация модулей osint.py...`,
+        `[~] Подключение к базам данных...`,
+        `[*] Анализ цели: ${input}`,
+        `[~] Поиск совпадений в архивах утечек...`
+    ];
+
+    for (let log of logs) {
+        output.innerHTML += `<div class="system-log">${log}</div>`;
+        output.scrollTop = output.scrollHeight;
+        await sleep(500);
+    }
+
+    let country = "Определяется...";
+    let operator = "Глобальный поиск";
+    let fakeCity = ["Москва", "Санкт-Петербург", "Краснодар", "Новосибирск", "Минск"][Math.floor(Math.random() * 5)];
+    let fakeAge = Math.floor(Math.random() * (35 - 18 + 1)) + 18;
+    
+    if (input.replace(/[^0-9]/g, '').length >= 10) {
+        country = "Российская Федерация 🇷🇺";
+        operator = ["МТС", "Билайн", "МегаФон", "Теле2"][Math.floor(Math.random() * 4)];
+    }
+
+    output.innerHTML += `
+<hr style="border-color: #00ff66; border-style: dashed;">
+<div class="success-log">🎯 ДАННЫЕ НАЙДЕНЫ В БАЗЕ:</div>
+[•] Страна: ${country}
+[•] Город: ${fakeCity}
+[•] Оператор: ${operator}
+[•] Возраст: ~${fakeAge} лет
+[•] Статус аккаунта: Активен
+----------------------------------------
+<span style="color: #ffff00;">[+] osint.py успешно завершил работу.</span>`;
+    
+    output.scrollTop = output.scrollHeight;
+}
+</script>
+
+</body>
+</html>
