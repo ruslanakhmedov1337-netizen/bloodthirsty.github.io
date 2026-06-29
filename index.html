@@ -73,13 +73,8 @@
             display: block;
         }
 
-        /* ЭКРАН 1: ШАПКА И РОБОТ БЛИНКИ */
-        #screen-welcome { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%;
-        }
+        /* ЭКРАН 1: СТИЛИ ДЛЯ ШАПКИ И РОБОТА БЛИНКИ */
+        #screen-welcome { display: flex; flex-direction: column; align-items: center; }
         
         .brand-header {
             display: flex;
@@ -95,177 +90,236 @@
             text-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
             letter-spacing: 2px;
         }
-        
         /* Блинки из пакмана (by BlackisPlay) */
         #ghost { position: relative; scale: 0.35; width: 140px; height: 140px; margin: -40px; }
         #red {
             animation: upNDown infinite 0.5s; position: relative; width: 140px; height: 140px;
             display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(14, 1fr);
             grid-template-areas:
-            "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14"
-            "b1 b2 b3 b4 top1 top1 top1 top1 top1 top1 b11 b12 b13 b14"
-            "c1 c2 c3 top2 top2 top2 top2 top2 top2 top2 top2 c12 c13 c14"
-            "d1 d2 top3 top3 eye1L eye1R top3 top3 eye2L eye2R top3 top3 d13 d14"
-            "e1 e2 top4 top4 eye1L eye1R top4 top4 eye2L eye2R top4 top4 e13 e14"
-            "f1 f2 top5 top5 top5 top5 top5 top5 top5 top5 top5 top5 f13 f14"
-            "g1 g2 top6 top6 top6 top6 top6 top6 top6 top6 top6 top6 g13 g14"
-            "h1 h2 top7 top7 top7 top7 top7 top7 top7 top7 top7 top7 h13 h14"
-            "i1 i2 top8 top8 top8 top8 top8 top8 top8 top8 top8 top8 i13 i14"
-            "j1 j2 top9 top9 top9 top9 top9 top9 top9 top9 top9 top9 j13 j14"
-            "k1 k2 topA bot1 bot1 topA topA bot2 bot2 topA topA bot3 bot3 k14"
-            "l1 topB topB bot1 bot1 topB bot2 bot2 topB bot3 bot3 topB topB l14"
-            "m1 topC m3 bot1 m5 topC m7 bot2 m9 topC m11 bot3 m13 m14"
-            "n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 n13 n14";
+            "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14" "b1 b2 b3 top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14"
+            "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14" "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14"
+            "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14" "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14"
+            "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+            "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+            "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4"
+            "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5" "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18";
         }
-        .redBg { background-color: #ff0000; box-shadow: 0 0 20px #ff0000; }
-        .whiteBg { background-color: #ffffff; }
-        .blueBg { background-color: #2b2bff; }
-        .eyeLeft { grid-area: eye1L; background-color: #ffffff; border-radius: 30% 30% 0 0; }
-        .eyeRight { grid-area: eye2L; background-color: #ffffff; border-radius: 30% 30% 0 0; }
-        .pupilLeft { grid-area: eye1R; background-color: #2b2bff; border-radius: 0 0 40% 40%; }
-        .pupilRight { grid-area: eye2R; background-color: #2b2bff; border-radius: 0 0 40% 40%; }
+        @keyframes upNDown { 0%, 49% { transform: translateY(0px); } 50%, 100% { transform: translateY(-10px); } }
+        #top0, #top1, #top2, #top3, #top4, #st0, #st1, #st2, #st3, #st4, #st5 { background-color: red; }
+        #top0 { grid-area: top0; } #top1 { grid-area: top1; } #top2 { grid-area: top2; } #top3 { grid-area: top3; } #top4 { grid-area: top4; }
+        #st0 { grid-area: st0; } #st1 { grid-area: st1; } #st2 { grid-area: st2; } #st3 { grid-area: st3; } #st4 { grid-area: st4; } #st5 { grid-area: st5; }
+        #an1 { grid-area: an1; animation: flicker0 infinite 0.5s; } #an18 { grid-area: an18; animation: flicker0 infinite 0.5s; }
+        #an2 { grid-area: an2; animation: flicker1 infinite 0.5s; } #an17 { grid-area: an17; animation: flicker1 infinite 0.5s; }
+        #an3 { grid-area: an3; animation: flicker1 infinite 0.5s; } #an16 { grid-area: an16; animation: flicker1 infinite 0.5s; }
+        #an4 { grid-area: an4; animation: flicker1 infinite 0.5s; } #an15 { grid-area: an15; animation: flicker1 infinite 0.5s; }
+        #an6 { grid-area: an6; animation: flicker0 infinite 0.5s; } #an12 { grid-area: an12; animation: flicker0 infinite 0.5s; }
+        #an7 { grid-area: an7; animation: flicker0 infinite 0.5s; } #an13 { grid-area: an13; animation: flicker0 infinite 0.5s; }
+        #an9 { grid-area: an9; animation: flicker1 infinite 0.5s; } #an10 { grid-area: an10; animation: flicker1 infinite 0.5s; }
+        #an8 { grid-area: an8; animation: flicker0 infinite 0.5s; } #an11 { grid-area: an11; animation: flicker0 infinite 0.5s; }
+        @keyframes flicker0 { 0%, 49% { background-color: red; } 50%, 100% { background-color: transparent; } }
+        @keyframes flicker1 { 0%, 49% { background-color: transparent; } 50%, 100% { background-color: red; } }
+        #eye, #eye1 { width: 40px; height: 50px; position: absolute; top: 30px; }
+        #eye { left: 10px; } #eye1 { right: 30px; }
+        #eye::before, #eye1::before { content: ""; background-color: white; width: 20px; height: 50px; transform: translateX(10px); display: block; position: absolute; }
+        #eye::after, #eye1::after { content: ""; background-color: white; width: 40px; height: 30px; transform: translateY(10px); display: block; position: absolute; }
+        #pupil, #pupil1 { width: 20px; height: 20px; background-color: blue; position: absolute; top: 50px; z-index: 1; animation: eyesMovement infinite 3s; }
+        #pupil { left: 10px; } #pupil1 { right: 50px; }
+        @keyframes eyesMovement { 0%, 49% { transform: translateX(0px); } 50%, 99% { transform: translateX(10px); } 100% { transform: translateX(0px); } }
 
-        @keyframes upNDown {
-            0% { top: 0px; }
-            50% { top: -8px; }
-            100% { top: 0px; }
+        /* ЭКРАН 2: МЕНЮ ПОИСКА */
+        #screen-menu { display: none; width: 100%; }
+        .search-type-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .type-btn { padding: 8px 14px; font-size: 12px; border-radius: 8px; background: #2a2a2a; border: 1px solid #444; color: #fff; cursor: pointer; font-family: monospace; }
+        .type-btn.active { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        .footer-note { font-size: 11px; color: #666; margin-top: 40px; line-height: 1.4; padding: 0 20px; }
+
+        /* ЭКРАН 3: ЗАГРУЗКА (by dovatgabriel) */
+        #screen-loading { display: none; flex-direction: column; align-items: center; }
+        .newtons-cradle {
+            --uib-size: 50px; --uib-speed: 1.2s; --uib-color: fuchsia;
+            position: relative; display: flex; align-items: center; justify-content: center; width: var(--uib-size); height: var(--uib-size);
         }
+        .newtons-cradle__dot { position: relative; display: flex; align-items: center; height: 100%; width: 25%; transform-origin: center top; }
+        .newtons-cradle__dot::after { content: ''; display: block; width: 100%; height: 25%; border-radius: 50%; background-color: var(--uib-color); }
+        .newtons-cradle__dot:first-child { animation: swing var(--uib-speed) linear infinite; }
+        .newtons-cradle__dot:last-child { animation: swing2 var(--uib-speed) linear infinite; }
+        @keyframes swing { 0% { transform: rotate(0deg); animation-timing-function: ease-out; } 25% { transform: rotate(70deg); animation-timing-function: ease-in; } 50% { transform: rotate(0deg); animation-timing-function: linear; } }
+        @keyframes swing2 { 0% { transform: rotate(0deg); animation-timing-function: linear; } 50% { transform: rotate(0deg); animation-timing-function: ease-out; } 75% { transform: rotate(-70deg); animation-timing-function: ease-in; } }
+        .loading-text { margin-top: 20px; color: fuchsia; font-size: 14px; letter-spacing: 1px; }
 
-        /* ЭКРАН 2: ТЕРМИНАЛ (Изначально скрыт) */
-        #screen-terminal {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .output-box {
-            width: 100%;
-            max-width: 440px;
-            background: #000;
-            border: 1px dashed #00ff66;
-            padding: 15px;
-            min-height: 180px;
-            white-space: pre-wrap;
-            font-size: 14px;
+        /* ЭКРАН 4: ОКНО СИМУЛЯЦИИ ТЕРМИНАЛА */
+        #screen-terminal { display: none; width: 100%; text-align: left; }
+        .terminal-box {
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 200px;
+            box-shadow: inset 0 0 10px #000;
+            font-size: 13px;
+            line-height: 1.5;
             color: #00ff66;
-            text-align: left;
-            box-sizing: border-box;
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
         }
-        .system-log { color: #888; }
-        .success-log { color: #ffff00; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    
-    <!-- ЭКРАН 1: ОРИГИНАЛЬНОЕ МЕНЮ С БЛИНКИ, ВВОДОМ И КНОПКОЙ -->
-    <div id="screen-welcome">
-        <div class="brand-header">
-            <div id="ghost">
-                <div id="red">
-                    <div class="redBg" style="grid-area: top0;"></div>
-                    <div class="redBg" style="grid-area: top1;"></div>
-                    <div class="redBg" style="grid-area: top2;"></div>
-                    <div class="redBg" style="grid-area: top3;"></div>
-                    <div class="redBg" style="grid-area: top4;"></div>
-                    <div class="redBg" style="grid-area: top5;"></div>
-                    <div class="redBg" style="grid-area: top6;"></div>
-                    <div class="redBg" style="grid-area: top7;"></div>
-                    <div class="redBg" style="grid-area: top8;"></div>
-                    <div class="redBg" style="grid-area: top9;"></div>
-                    <div class="redBg" style="grid-area: topA;"></div>
-                    <div class="redBg" style="grid-area: topB;"></div>
-                    <div class="redBg" style="grid-area: topC;"></div>
-                    <div class="eyeLeft"></div><div class="pupilLeft"></div><div class="eyeRight"></div><div class="pupilRight"></div>
-                    <div class="whiteBg" style="grid-area: bot1;"></div><div class="whiteBg" style="grid-area: bot2;"></div><div class="whiteBg" style="grid-area: bot3;"></div>
+    <div class="main-container">
+
+        <div id="screen-welcome">
+            <div class="brand-header">
+                <div class="brand-title">bloodthirsty</div>
+                <div id="ghost">
+                    <div id="red">
+                        <div id="pupil"></div><div id="pupil1"></div><div id="eye"></div><div id="eye1"></div>
+                        <div id="top0"></div><div id="top1"></div><div id="top2"></div><div id="top3"></div><div id="top4"></div>
+                        <div id="st0"></div><div id="st1"></div><div id="st2"></div><div id="st3"></div><div id="st4"></div><div id="st5"></div>
+                        <div id="an1"></div><div id="an2"></div><div id="an3"></div><div id="an4"></div><div id="an5"></div><div id="an6"></div>
+                        <div id="an7"></div><div id="an8"></div><div id="an9"></div><div id="an10"></div><div id="an11"></div><div id="an12"></div>
+                        <div id="an13"></div><div id="an14"></div><div id="an15"></div><div id="an16"></div><div id="an17"></div><div id="an18"></div>
+                    </div>
                 </div>
             </div>
-            <div class="brand-title">bloodthirsty</div>
+            <button onclick="goToMenu()">НАЧАТЬ ПОИСК</button>
         </div>
 
-        <input type="text" id="targetInput" class="input" placeholder="Введите цель...">
-        <button onclick="startOsintSearch()">ЗАПУСТИТЬ ПОИСК</button>
+        <div id="screen-menu">
+            <h2 style="font-size: 18px; margin-bottom: 20px; color: fuchsia;">КАТЕГОРИЯ ПОИСКА</h2>
+            
+            <div class="search-type-container">
+                <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg', '@username в Telegram')">Поиск по ТГ</div>
+                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '+7 (999) 000-00-00')">Поиск по номеру</div>
+                <div class="type-btn" id="btn-fio" onclick="changeSearchType('fio', 'Иванов Иван Иванович')">Поиск по ФИО</div>
+            </div>
+
+            <input placeholder="@username в Telegram" class="input" type="text" id="main-search-input">
+            
+            <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
+
+            <div class="footer-note">
+                данные находятся только по базам данных в скором времени их будет больше
+            </div>
+        </div>
+
+        <div id="screen-loading">
+            <div class="newtons-cradle">
+                <div class="newtons-cradle__dot"></div>
+                <div class="newtons-cradle__dot"></div>
+                <div class="newtons-cradle__dot"></div>
+                <div class="newtons-cradle__dot"></div>
+            </div>
+            <div class="loading-text">> Запуск osint.py...</div>
+        </div>
+
+        <div id="screen-terminal">
+            <h3 style="font-size: 14px; color: #666; margin-bottom: 10px;">OUTPUT LOGS (osint.py):</h3>
+            <div class="terminal-box" id="terminal-output"></div>
+            <button onclick="resetSystem()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
+        </div>
+
     </div>
 
-    <!-- ЭКРАН 2: ТЕРМИНАЛ ДЛЯ РЕЗУЛЬТАТОВ (ОТКРЫВАЕТСЯ ПО КНОПКЕ) -->
-    <div id="screen-terminal">
-        <div class="brand-title" style="font-size: 20px; margin-bottom: 15px;">🩸 OSINT TERMINAL</div>
-        <div class="output-box" id="terminalOutput"></div>
-        <button onclick="backToMenu()" style="font-size: 12px; padding: 0.8em 1.5em;">НАЗАД В МЕНЮ</button>
-    </div>
+    <script>
+        let currentType = 'tg';
 
-</div>
+        // Переключение типов поиска во втором меню
+        function changeSearchType(type, placeholderText) {
+            currentType = type;
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${type}`).classList.add('active');
+            document.getElementById('main-search-input').placeholder = placeholderText;
+            document.getElementById('main-search-input').value = '';
+        }
 
-<script>
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+        // Переход с 1 на 2 экран
+        function goToMenu() {
+            document.getElementById('screen-welcome').style.display = 'none';
+            document.getElementById('screen-menu').style.display = 'block';
+        }
 
-async function startOsintSearch() {
-    const input = document.getElementById('targetInput').value.trim();
-    const welcomeScreen = document.getElementById('screen-welcome');
-    const terminalScreen = document.getElementById('screen-terminal');
-    const output = document.getElementById('terminalOutput');
-    
-    if (!input) {
-        alert("Ошибка: Поле ввода пустое!");
-        return;
-    }
+        // Переход со 2 на 3 экран (загрузка)
+        function startLoading() {
+            const val = document.getElementById('main-search-input').value;
+            if(!val.trim()) {
+                alert("Ошибка: Строка ввода не должна быть пустой!");
+                return;
+            }
+            document.getElementById('screen-menu').style.display = 'none';
+            document.getElementById('screen-loading').style.display = 'flex';
 
-    // Переключаем экраны как в твоем меню
-    welcomeScreen.style.display = 'none';
-    terminalScreen.style.display = 'flex';
-    output.innerHTML = "";
-    
-    const logs = [
-        `[+] Запуск модулей osint.py...`,
-        `[~] Подключение к защищенным базам данных...`,
-        `[*] Поиск совпадений по цели: ${input}`,
-        `[~] Сортировка полученных логов утечек...`
-    ];
+            // Через 3 секунды загрузка убирается и запускается симуляция терминала
+            setTimeout(runTerminalSimulation, 3000);
+        }
 
-    for (let log of logs) {
-        output.innerHTML += `<div class="system-log">${log}</div>`;
-        output.scrollTop = output.scrollHeight;
-        await sleep(500);
-    }
+        // Эмуляция вывода логов скрипта osint.py с генерацией базы данных
+        function runTerminalSimulation() {
+            document.getElementById('screen-loading').style.display = 'none';
+            document.getElementById('screen-terminal').style.display = 'block';
 
-    let country = "Определяется...";
-    let operator = "Глобальный поиск";
-    let fakeCity = ["Москва", "Санкт-Петербург", "Краснодар", "Новосибирск", "Минск"][Math.floor(Math.random() * 5)];
-    let fakeAge = Math.floor(Math.random() * (35 - 18 + 1)) + 18;
-    
-    if (input.replace(/[^0-9]/g, '').length >= 10) {
-        country = "Российская Федерация 🇷🇺";
-        operator = ["МТС", "Билайн", "МегаФон", "Теле2"][Math.floor(Math.random() * 4)];
-    }
+            const output = document.getElementById('terminal-output');
+            const targetData = document.getElementById('main-search-input').value;
+            output.innerHTML = ''; // Очистка
+            
+            // Динамические переменные из базы данных твоего софта
+            let country = "Определяется...";
+            let operator = "Глобальный поиск";
+            let fakeCity = ["Москва", "Санкт-Петербург", "Краснодар", "Новосибирск", "Минск"][Math.floor(Math.random() * 5)];
+            let fakeAge = Math.floor(Math.random() * (35 - 18 + 1)) + 18;
+            
+            // Если ввели номер телефона, выставляем логичные данные
+            if (currentType === 'phone' || targetData.replace(/[^0-9]/g, '').length >= 10) {
+                country = "Российская Федерация 🇷🇺";
+                operator = ["МТС", "Билайн", "МегаФон", "Теле2"][Math.floor(Math.random() * 4)];
+            } else if (currentType === 'tg') {
+                country = "Telegram Сеть";
+                operator = "Протокол MTProto";
+            } else {
+                country = "СНГ";
+                operator = "Локальные реестры";
+            }
 
-    output.innerHTML += `
-<hr style="border-color: #00ff66; border-style: dashed;">
-<div class="success-log">🎯 ДАННЫЕ НАЙДЕНЫ В БАЗЕ OSINT.PY:</div>
-----------------------------------------
-[•] Ввод: ${input}
-[•] Геолокация: ${country} (${fakeCity})
-[•] Оператор/Провайдер: ${operator}
-[•] Возраст по базам: ~${fakeAge} лет
-[•] Статус: Проверен успешно
-----------------------------------------
-<span style="color: #ffff00;">[+] Скрипт завершил работу без ошибок.</span>`;
-    
-    output.scrollTop = output.scrollHeight;
-}
+            // Строки логов, которые будут печататься по очереди
+            const logs = [
+                `[~] Подключение к базе данных osint_base.db...`,
+                `[+] Соединение установлено. Поиск совпадений для: "${targetData}"`,
+                `[*] Проверка локальных логов по категории [${currentType.toUpperCase()}]...`,
+                `[*] Сканирование внешних зеркал архивов...`,
+                `[!] Найдено совпадений в таблицах: [1]`,
+                `----------------------------------------`,
+                `[🎯 ДАННЫЕ ИЗ БАЗЫ OSINT.PY]`,
+                `• Ввод: ${targetData}`,
+                `• Страна/Сеть: ${country}`,
+                `• Город/Локация: ${fakeCity}`,
+                `• Провайдер/Оператор: ${operator}`,
+                `• Примерный возраст: ~${fakeAge} лет`,
+                `• ID сессии: B-${Math.floor(Math.random() * 900000 + 100000)}`,
+                `----------------------------------------`,
+                `[SUCCESS] Скрипт osint.py успешно завершил работу.`
+            ];
 
-function backToMenu() {
-    document.getElementById('screen-terminal').style.display = 'none';
-    document.getElementById('screen-welcome').style.display = 'flex';
-}
-</script>
+            let index = 0;
+            function printLine() {
+                if (index < logs.length) {
+                    output.innerHTML += logs[index] + '<br>';
+                    index++;
+                    setTimeout(printLine, 600); // Скорость печати строк
+                } else {
+                    // Когда всё напечаталось, показываем кнопку сброса
+                    document.getElementById('btn-restart').style.style = 'block';
+                    document.getElementById('btn-restart').style.display = 'block';
+                }
+            }
+            printLine();
+        }
+
+        // Полный сброс, чтобы запустить заново
+        function resetSystem() {
+            document.getElementById('main-search-input').value = '';
+            document.getElementById('btn-restart').style.display = 'none';
+            document.getElementById('screen-terminal').style.display = 'none';
+            document.getElementById('screen-welcome').style.display = 'flex';
+        }
+    </script>
 
 </body>
 </html>
