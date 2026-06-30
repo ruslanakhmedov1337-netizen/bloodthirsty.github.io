@@ -5,44 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
-        /* (Твои стили без изменений) */
+        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ */
         body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
         .main-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         button, .btn-style { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: box-shadow ease-in-out 0.3s, background-color ease-in-out 0.1s, letter-spacing ease-in-out 0.1s, transform ease-in-out 0.1s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
         button:hover, .btn-style:hover { box-shadow: var(--hover-shadows); }
         button:active, .btn-style:active { box-shadow: var(--hover-shadows), var(--accent) 0px 0px 30px 5px; background-color: var(--accent); transform: scale(0.95); }
         .input { margin: 15px auto; background: none; border: none; outline: none; width: 100%; max-width: 260px; padding: 12px 20px; font-size: 16px; border-radius: 9999px; box-shadow: inset 2px 5px 10px rgb(5, 5, 5); color: #fff; text-align: center; display: block; }
+        #screen-welcome { display: flex; flex-direction: column; align-items: center; }
+        .brand-header { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px; }
+        .brand-title { font-size: 28px; font-weight: bold; color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); letter-spacing: 2px; }
+        #ghost { position: relative; scale: 0.35; width: 140px; height: 140px; margin: -40px; }
+        #red { animation: upNDown infinite 0.5s; position: relative; width: 140px; height: 140px; display: grid; grid-template-columns: repeat(14, 1fr); grid-template-rows: repeat(14, 1fr); grid-template-areas: "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14" "b1 b2 b3 top1 top1 top1 top1 top1 top1 top1 top1 b12 b13 b14" "c1 c2 top2 top2 top2 top2 top2 top2 top2 top2 top2 top2 c13 c14" "d1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 d14" "e1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 e14" "f1 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 top3 f14" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4 top4" "st0 st0 an4 st1 an7 st2 an10 an10 st3 an13 st4 an16 st5 st5" "an1 an2 an3 an5 an6 an8 an9 an9 an11 an12 an14 an15 an17 an18"; }
+        @keyframes upNDown { 0%, 49% { transform: translateY(0px); } 50%, 100% { transform: translateY(-10px); } }
+        #top0, #top1, #top2, #top3, #top4, #st0, #st1, #st2, #st3, #st4, #st5 { background-color: red; }
+        #top0 { grid-area: top0; } #top1 { grid-area: top1; } #top2 { grid-area: top2; } #top3 { grid-area: top3; } #top4 { grid-area: top4; } #st0 { grid-area: st0; } #st1 { grid-area: st1; } #st2 { grid-area: st2; } #st3 { grid-area: st3; } #st4 { grid-area: st4; } #st5 { grid-area: st5; }
+        #an1 { grid-area: an1; animation: flicker0 infinite 0.5s; } #an18 { grid-area: an18; animation: flicker0 infinite 0.5s; } #an2 { grid-area: an2; animation: flicker1 infinite 0.5s; } #an17 { grid-area: an17; animation: flicker1 infinite 0.5s; } #an3 { grid-area: an3; animation: flicker1 infinite 0.5s; } #an16 { grid-area: an16; animation: flicker1 infinite 0.5s; } #an4 { grid-area: an4; animation: flicker1 infinite 0.5s; } #an15 { grid-area: an15; animation: flicker1 infinite 0.5s; } #an6 { grid-area: an6; animation: flicker0 infinite 0.5s; } #an12 { grid-area: an12; animation: flicker0 infinite 0.5s; } #an7 { grid-area: an7; animation: flicker0 infinite 0.5s; } #an13 { grid-area: an13; animation: flicker0 infinite 0.5s; } #an9 { grid-area: an9; animation: flicker1 infinite 0.5s; } #an10 { grid-area: an10; animation: flicker1 infinite 0.5s; } #an8 { grid-area: an8; animation: flicker0 infinite 0.5s; } #an11 { grid-area: an11; animation: flicker0 infinite 0.5s; }
+        @keyframes flicker0 { 0%, 49% { background-color: red; } 50%, 100% { background-color: transparent; } }
+        @keyframes flicker1 { 0%, 49% { background-color: transparent; } 50%, 100% { background-color: red; } }
+        #eye, #eye1 { width: 40px; height: 50px; position: absolute; top: 30px; }
+        #eye { left: 10px; } #eye1 { right: 30px; }
+        #eye::before, #eye1::before { content: ""; background-color: white; width: 20px; height: 50px; transform: translateX(10px); display: block; position: absolute; }
+        #eye::after, #eye1::after { content: ""; background-color: white; width: 40px; height: 30px; transform: translateY(10px); display: block; position: absolute; }
+        #pupil, #pupil1 { width: 20px; height: 20px; background-color: blue; position: absolute; top: 50px; z-index: 1; animation: eyesMovement infinite 3s; }
+        #pupil { left: 10px; } #pupil1 { right: 50px; }
+        @keyframes eyesMovement { 0%, 49% { transform: translateX(0px); } 50%, 99% { transform: translateX(10px); } 100% { transform: translateX(0px); } }
         #screen-menu { display: none; width: 100%; }
         .search-type-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
         .type-btn { padding: 8px 14px; font-size: 12px; border-radius: 8px; background: #2a2a2a; border: 1px solid #444; color: #fff; cursor: pointer; font-family: monospace; }
         .type-btn.active { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        .footer-note { font-size: 11px; color: #666; margin-top: 40px; line-height: 1.4; padding: 0 20px; }
         #screen-loading { display: none; flex-direction: column; align-items: center; }
+        .newtons-cradle { --uib-size: 50px; --uib-speed: 1.2s; --uib-color: fuchsia; position: relative; display: flex; align-items: center; justify-content: center; width: var(--uib-size); height: var(--uib-size); }
+        .newtons-cradle__dot { position: relative; display: flex; align-items: center; height: 100%; width: 25%; transform-origin: center top; }
+        .newtons-cradle__dot::after { content: ''; display: block; width: 100%; height: 25%; border-radius: 50%; background-color: var(--uib-color); }
+        .newtons-cradle__dot:first-child { animation: swing var(--uib-speed) linear infinite; }
+        .newtons-cradle__dot:last-child { animation: swing2 var(--uib-speed) linear infinite; }
+        @keyframes swing { 0% { transform: rotate(0deg); animation-timing-function: ease-out; } 25% { transform: rotate(70deg); animation-timing-function: ease-in; } 50% { transform: rotate(0deg); animation-timing-function: linear; } }
+        @keyframes swing2 { 0% { transform: rotate(0deg); animation-timing-function: linear; } 50% { transform: rotate(0deg); animation-timing-function: ease-out; } 75% { transform: rotate(-70deg); animation-timing-function: ease-in; } }
+        .loading-text { margin-top: 20px; color: fuchsia; font-size: 14px; letter-spacing: 1px; }
         #screen-terminal { display: none; width: 100%; text-align: left; }
-        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; color: #00ff66; font-size: 13px; line-height: 1.5; }
+        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; box-shadow: inset 0 0 10px #000; font-size: 13px; line-height: 1.5; color: #00ff66; }
     </style>
 </head>
 <body>
     <div class="main-container">
         <div id="screen-welcome">
-            <div class="brand-title" style="color: #ff0055; font-size: 28px; margin-bottom: 20px;">bloodthirsty</div>
+            <div class="brand-header">
+                <div class="brand-title">bloodthirsty</div>
+                <div id="ghost"><div id="red"><div id="pupil"></div><div id="pupil1"></div><div id="eye"></div><div id="eye1"></div><div id="top0"></div><div id="top1"></div><div id="top2"></div><div id="top3"></div><div id="top4"></div><div id="st0"></div><div id="st1"></div><div id="st2"></div><div id="st3"></div><div id="st4"></div><div id="st5"></div><div id="an1"></div><div id="an2"></div><div id="an3"></div><div id="an4"></div><div id="an5"></div><div id="an6"></div><div id="an7"></div><div id="an8"></div><div id="an9"></div><div id="an10"></div><div id="an11"></div><div id="an12"></div><div id="an13"></div><div id="an14"></div><div id="an15"></div><div id="an16"></div><div id="an17"></div><div id="an18"></div></div></div>
+            </div>
             <button onclick="goToMenu()">НАЧАТЬ ПОИСК</button>
         </div>
         <div id="screen-menu">
+            <h2 style="font-size: 18px; margin-bottom: 20px; color: fuchsia;">КАТЕГОРИЯ ПОИСКА</h2>
             <div class="search-type-container">
-                <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg', '@username')">ТГ</div>
-                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '+380...')">Номер</div>
-                <div class="type-btn" id="btn-fio" onclick="changeSearchType('fio', 'ФИО')">ФИО</div>
+                <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg', '@username в Telegram')">Поиск по ТГ</div>
+                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '+7 (999) 000-00-00')">Поиск по номеру</div>
+                <div class="type-btn" id="btn-fio" onclick="changeSearchType('fio', 'Иванов Иван Иванович')">Поиск по ФИО</div>
             </div>
-            <input placeholder="@username" class="input" type="text" id="main-search-input">
+            <input placeholder="@username в Telegram" class="input" type="text" id="main-search-input">
             <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
+            <div class="footer-note">данные находятся только по базам данных</div>
         </div>
-        <div id="screen-loading">Индексация...</div>
+        <div id="screen-loading">
+            <div class="newtons-cradle"><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div></div>
+            <div class="loading-text">> Запуск osint.py...</div>
+        </div>
         <div id="screen-terminal">
+            <h3 style="font-size: 14px; color: #666; margin-bottom: 10px;">OUTPUT LOGS (osint.py):</h3>
             <div class="terminal-box" id="terminal-output"></div>
-            <button onclick="location.reload()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
+            <button onclick="resetSystem()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
         </div>
     </div>
-
     <script>
         let db = [];
         fetch('csvjson.json').then(r => r.json()).then(data => db = data);
@@ -54,15 +89,13 @@
             document.getElementById(`btn-${type}`).classList.add('active');
             document.getElementById('main-search-input').placeholder = ph;
         }
-
         function goToMenu() { document.getElementById('screen-welcome').style.display = 'none'; document.getElementById('screen-menu').style.display = 'block'; }
-        
         function startLoading() {
+            if(!document.getElementById('main-search-input').value.trim()) return;
             document.getElementById('screen-menu').style.display = 'none';
             document.getElementById('screen-loading').style.display = 'flex';
             setTimeout(runTerminalSimulation, 2000);
         }
-
         function runTerminalSimulation() {
             document.getElementById('screen-loading').style.display = 'none';
             document.getElementById('screen-terminal').style.display = 'block';
@@ -70,22 +103,21 @@
             const target = document.getElementById('main-search-input').value.trim();
             output.innerHTML = '';
             
-            // Логика очистки ввода для сравнения (удаляем всё кроме цифр, если это телефон)
-            const cleanTarget = (str) => str.replace(/[^0-9]/g, '');
-            
+            // Ищем данные: перебираем объекты, ищем ключ, соответствующий типу, или ищем совпадение значения
             const found = db.find(item => {
-                const val = String(item.phone || item.fio || item.tg || "");
-                if (currentType === 'phone') return cleanTarget(val) === cleanTarget(target);
-                return val.toLowerCase() === target.toLowerCase();
+                // Приводим все значения к строке и удаляем нецифровые символы для сравнения номеров
+                const normalize = (s) => String(s).replace(/\D/g, '');
+                if (currentType === 'phone') return normalize(item.phone || "") === normalize(target);
+                if (currentType === 'tg') return String(item.tg || "").toLowerCase() === target.toLowerCase();
+                if (currentType === 'fio') return String(item.fio || "").toLowerCase() === target.toLowerCase();
+                return false;
             });
             
-            let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск по: "${target}"`];
+            let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск: "${target}"`];
             if (found) {
                 logs.push(`[🎯 ДАННЫЕ НАЙДЕНЫ]`);
                 for (let k in found) logs.push(`• ${k}: ${found[k]}`);
-            } else {
-                logs.push(`[-] Совпадений не найдено.`);
-            }
+            } else { logs.push(`[-] Совпадений не найдено.`); }
             
             let i = 0;
             function print() {
@@ -94,6 +126,7 @@
             }
             print();
         }
+        function resetSystem() { location.reload(); }
     </script>
 </body>
 </html>
