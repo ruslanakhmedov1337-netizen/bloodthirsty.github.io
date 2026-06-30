@@ -103,14 +103,18 @@
             const target = document.getElementById('main-search-input').value.trim();
             output.innerHTML = '';
             
-            // Ищем данные: перебираем объекты, ищем ключ, соответствующий типу, или ищем совпадение значения
+            // УНИВЕРСАЛЬНЫЙ ПОИСК: ищем во всех полях базы
             const found = db.find(item => {
-                // Приводим все значения к строке и удаляем нецифровые символы для сравнения номеров
-                const normalize = (s) => String(s).replace(/\D/g, '');
-                if (currentType === 'phone') return normalize(item.phone || "") === normalize(target);
-                if (currentType === 'tg') return String(item.tg || "").toLowerCase() === target.toLowerCase();
-                if (currentType === 'fio') return String(item.fio || "").toLowerCase() === target.toLowerCase();
-                return false;
+                return Object.values(item).some(val => {
+                    const strVal = String(val).trim();
+                    const targetClean = target.replace(/\D/g, '');
+                    const valClean = strVal.replace(/\D/g, '');
+                    
+                    // Если ввод - цифры (телефон), сравниваем их без учета спецсимволов
+                    if (/^\d+$/.test(target)) return valClean === targetClean;
+                    // Иначе ищем точное текстовое совпадение
+                    return strVal.toLowerCase() === target.toLowerCase();
+                });
             });
             
             let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск: "${target}"`];
