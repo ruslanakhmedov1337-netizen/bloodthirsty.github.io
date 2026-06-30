@@ -1,34 +1,570 @@
-    function runTerminalSimulation() {
-        document.getElementById('screen-loading').style.display = 'none';
-        document.getElementById('screen-terminal').style.display = 'block';
-        
-        const input = document.getElementById('main-search-input').value.trim();
-        const output = document.getElementById('terminal-output');
-        
-        // Очищаем ввод от всего, кроме цифр
-        const cleanInput = input.replace(/\D/g, '');
-        
-        // Ищем в базе: перебираем каждое поле каждого объекта
-        const found = fullDatabase.find(item => {
-            return Object.values(item).some(val => {
-                const dbValue = String(val).replace(/\D/g, '');
-                // Сравниваем очищенные строки (если это цифры)
-                if (cleanInput.length > 0 && dbValue.length > 0) {
-                    return dbValue.includes(cleanInput);
-                }
-                // Иначе ищем по точному текстовому совпадению
-                return String(val).toLowerCase() === input.toLowerCase();
-            });
-        });
-        
-        if (found) {
-            let resultHtml = `[+] ДАННЫЕ НАЙДЕНЫ:<br>`;
-            for (let key in found) {
-                resultHtml += `• ${key}: ${found[key]}<br>`;
-            }
-            output.innerHTML = resultHtml;
-        } else {
-            output.innerHTML = `[-] Совпадений по запросу "${input}" не найдено.`;
-        }
-        document.getElementById('btn-restart').style.display = 'block';
-    }
+[
+  {
+    "telegram_id": "1485647396",
+    "phone": "79529637711",
+    "username": "",
+    "first_name": "Евген",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "407978987",
+    "phone": "79671291848",
+    "username": "blinblinskyblin",
+    "first_name": "Danya",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "749370183",
+    "phone": "79501115921",
+    "username": "",
+    "first_name": "А",
+    "last_name": "Аа",
+    "email": ""
+  },
+  {
+    "telegram_id": "948408393",
+    "phone": "79371306991",
+    "username": "l_never_look_back_l",
+    "first_name": "Oleg",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "596999557",
+    "phone": "380975719695",
+    "username": "Ttoffix",
+    "first_name": "🐍Геля",
+    "last_name": "🌿",
+    "email": ""
+  },
+  {
+    "telegram_id": "1710150580",
+    "phone": "79128391418",
+    "username": "",
+    "first_name": "маша✨",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "313386286",
+    "phone": "77078294079",
+    "username": "masgutovmaksat",
+    "first_name": "Maxat",
+    "last_name": "Masgutov",
+    "email": ""
+  },
+  {
+    "telegram_id": "934859197",
+    "phone": "380970149049",
+    "username": "",
+    "first_name": "098188",
+    "last_name": "Vladosiik",
+    "email": ""
+  },
+  {
+    "telegram_id": "1236311981",
+    "phone": "77059919913",
+    "username": "",
+    "first_name": "(❍ᴥ❍ʋ)пр⃞осто человек",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1725876481",
+    "phone": "77013959782",
+    "username": "",
+    "first_name": "Алмаз",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "900918008",
+    "phone": "79036034075",
+    "username": "",
+    "first_name": "Анастасия",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "638602506",
+    "phone": "79235971880",
+    "username": "",
+    "first_name": "Дмитрий",
+    "last_name": "Перов",
+    "email": ""
+  },
+  {
+    "telegram_id": "820050885",
+    "phone": "79991760414",
+    "username": "Sanechka86",
+    "first_name": "👑Санечка👑",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1183978425",
+    "phone": "79776923383",
+    "username": "",
+    "first_name": "Евгений",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "665747664",
+    "phone": "79636456292",
+    "username": "",
+    "first_name": "Nastya",
+    "last_name": "Ustinova",
+    "email": ""
+  },
+  {
+    "telegram_id": "1106416837",
+    "phone": "79787199827",
+    "username": "",
+    "first_name": "Im",
+    "last_name": "Nastya",
+    "email": ""
+  },
+  {
+    "telegram_id": "1501523554",
+    "phone": "380951702494",
+    "username": "",
+    "first_name": "Влад",
+    "last_name": "Влад",
+    "email": ""
+  },
+  {
+    "telegram_id": "842722347",
+    "phone": "79255151466",
+    "username": "Naitoors",
+    "first_name": "Nai-Toors",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1275633721",
+    "phone": "79381395121",
+    "username": "djemirbekov",
+    "first_name": "Tamerlan",
+    "last_name": "Эмирбеков",
+    "email": ""
+  },
+  {
+    "telegram_id": "1448535818",
+    "phone": "",
+    "username": "",
+    "first_name": "Farid",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1898093656",
+    "phone": "",
+    "username": "",
+    "first_name": "Евгений",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1331884883",
+    "phone": "",
+    "username": "VladimirDyu",
+    "first_name": "Vladimir",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1300133484",
+    "phone": "",
+    "username": "",
+    "first_name": "Хушанг",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1498408280",
+    "phone": "",
+    "username": "sultanovss",
+    "first_name": "Denis",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1531146098",
+    "phone": "",
+    "username": "",
+    "first_name": "Nemat",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1608784727",
+    "phone": "",
+    "username": "",
+    "first_name": "Алиса",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1606599514",
+    "phone": "",
+    "username": "Kami_No_Kodomo_666",
+    "first_name": "Чепушила",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1579601313",
+    "phone": "79251274133",
+    "username": "Kudesner77",
+    "first_name": "Андрей",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1532164581",
+    "phone": "",
+    "username": "abba245",
+    "first_name": "Ali",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1287061780",
+    "phone": "",
+    "username": "",
+    "first_name": "D . G.",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1239481156",
+    "phone": "",
+    "username": "Azamjon7938",
+    "first_name": "Азамджон",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "668376057",
+    "phone": "",
+    "username": "NagievEAE",
+    "first_name": "Джейхун",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "419607200",
+    "phone": "",
+    "username": "userbolik",
+    "first_name": "bk",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "570197357",
+    "phone": "",
+    "username": "zloprogul",
+    "first_name": "Анастасия",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "535373508",
+    "phone": "",
+    "username": "",
+    "first_name": "Александр",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "835554435",
+    "phone": "",
+    "username": "EsteticMaxx",
+    "first_name": "Estetic",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "841226166",
+    "phone": "79251240062",
+    "username": "nikushaaa27",
+    "first_name": "Veronika",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "1909874891",
+    "phone": "",
+    "username": "",
+    "first_name": "Вито",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "680d0fac13e5934970e75b2b",
+    "phone": "38000000000",
+    "username": "",
+    "first_name": "Николай",
+    "last_name": "Тихомир",
+    "email": "nikolai.tihomir3009@gmail.com"
+  },
+  {
+    "telegram_id": "680d0fac13e5934970e75b2c",
+    "phone": "380000000000",
+    "username": "",
+    "first_name": "Karina",
+    "last_name": "Raven",
+    "email": "innaekberg@gmail.com"
+  },
+  {
+    "telegram_id": "848646561",
+    "phone": "380007777777",
+    "username": "",
+    "first_name": "Татьяна",
+    "last_name": "Таня",
+    "email": "tanya_n_75@ukr.net"
+  },
+  {
+    "telegram_id": "450096425",
+    "phone": "3800505231097",
+    "username": "",
+    "first_name": "Lidiia",
+    "last_name": "Shevchenko",
+    "email": "lida2109@ukr.net"
+  },
+  {
+    "telegram_id": "927370985",
+    "phone": "380066669651",
+    "username": "",
+    "first_name": "Ольга",
+    "last_name": "Дорошенко",
+    "email": "olgadoroshenko121095@gmail.com"
+  },
+  {
+    "telegram_id": "1089203717",
+    "phone": "380067985924",
+    "username": "",
+    "first_name": "Наталья",
+    "last_name": "Кожокарь",
+    "email": "knatalia7050@gmail.com"
+  },
+  {
+    "telegram_id": "875824692",
+    "phone": "380095380808",
+    "username": "",
+    "first_name": "Андрієвська",
+    "last_name": "Олена",
+    "email": "lenutska11@gmail.com"
+  },
+  {
+    "telegram_id": "153996363",
+    "phone": "3800958639031",
+    "username": "",
+    "first_name": "Раиса",
+    "last_name": "Попова",
+    "email": "raja.s.popova@gmail.com"
+  },
+  {
+    "telegram_id": "818034850",
+    "phone": "3801639053",
+    "username": "",
+    "first_name": "Светлана",
+    "last_name": "Силина",
+    "email": "silinasveta510@gmail.com"
+  },
+  {
+    "telegram_id": "1250305611",
+    "phone": "380164669146",
+    "username": "",
+    "first_name": "Iryna",
+    "last_name": "Stryzhak",
+    "email": "irastryzh26@gmail.com"
+  },
+  {
+    "telegram_id": "852474351",
+    "phone": "3802614588",
+    "username": "",
+    "first_name": "Ale",
+    "last_name": "Kovalyova",
+    "email": "aleksandrak06@mail.ru"
+  },
+  {
+    "telegram_id": "877095250",
+    "phone": "380297884650",
+    "username": "",
+    "first_name": "Светлана",
+    "last_name": "Светлана",
+    "email": "svetlana041992@mail.ru"
+  },
+  {
+    "telegram_id": "1169711189",
+    "phone": "3803032860",
+    "username": "",
+    "first_name": "Светлана",
+    "last_name": "Тыртычная",
+    "email": "svetlanatyrtycnaa@gmail.com"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74991436619",
+    "username": "",
+    "first_name": "Круныч Живоин",
+    "last_name": "",
+    "email": "montivest@yandex.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959785483",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74953632263",
+    "username": "",
+    "first_name": "Айдеян Ашот Азатович",
+    "last_name": "",
+    "email": "abg@abg.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74956486521",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "client@arch-msk.com"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959019960",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "info@artpeople.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959790122",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "avkube@mail.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74957830945",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959181628",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74957874211",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74957395468",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74951562171",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "info@convice.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74992413446",
+    "username": "",
+    "first_name": "Джузеппе Ди Паче",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74955891993",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "info@domtek.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959671910",
+    "username": "",
+    "first_name": "Бурак Оздоган",
+    "last_name": "",
+    "email": "moscowheadoffice@enk.com"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959678080",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "apaleva@ibs.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74955008388",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959565211",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": ""
+  },
+  {
+    "telegram_id": "",
+    "phone": "74957724880",
+    "username": "",
+    "first_name": "Безукладов Владимир Иванович",
+    "last_name": "",
+    "email": "info@heatex.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74959213001",
+    "username": "",
+    "first_name": "Львовский Александр Николаевич",
+    "last_name": "",
+    "email": "honka@honka-moscow.ru"
+  },
+  {
+    "telegram_id": "",
+    "phone": "74952324224",
+    "username": "",
+    "first_name": "",
+    "last_name": "",
+    "email": "mail@icube.ru"
+  }
+]
