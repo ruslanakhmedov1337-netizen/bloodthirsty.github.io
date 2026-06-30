@@ -7,107 +7,68 @@
     <style>
         body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
         .main-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        button, .btn-style { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: box-shadow ease-in-out 0.3s, background-color ease-in-out 0.1s, letter-spacing ease-in-out 0.1s, transform ease-in-out 0.1s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
-        button:hover, .btn-style:hover { box-shadow: var(--hover-shadows); }
-        button:active, .btn-style:active { box-shadow: var(--hover-shadows), var(--accent) 0px 0px 30px 5px; background-color: var(--accent); transform: scale(0.95); }
+        button { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: box-shadow 0.3s, transform 0.1s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
+        button:hover { box-shadow: var(--hover-shadows); }
+        button:active { background-color: var(--accent); transform: scale(0.95); }
         .input { margin: 15px auto; background: none; border: none; outline: none; width: 100%; max-width: 260px; padding: 12px 20px; font-size: 16px; border-radius: 9999px; box-shadow: inset 2px 5px 10px rgb(5, 5, 5); color: #fff; text-align: center; display: block; }
         #screen-menu { display: none; width: 100%; }
-        .search-type-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
-        .type-btn { padding: 8px 14px; font-size: 12px; border-radius: 8px; background: #2a2a2a; border: 1px solid #444; color: #fff; cursor: pointer; font-family: monospace; }
-        .type-btn.active { background: #ff0055; border-color: #ff0055; box-shadow: 0 0 10px rgba(255,0,85,0.4); }
-        .footer-note { font-size: 11px; color: #666; margin-top: 40px; line-height: 1.4; padding: 0 20px; }
         #screen-loading { display: none; flex-direction: column; align-items: center; }
-        .newtons-cradle { --uib-size: 50px; --uib-speed: 1.2s; --uib-color: fuchsia; position: relative; display: flex; align-items: center; justify-content: center; width: var(--uib-size); height: var(--uib-size); }
-        .newtons-cradle__dot { position: relative; display: flex; align-items: center; height: 100%; width: 25%; transform-origin: center top; }
-        .newtons-cradle__dot::after { content: ''; display: block; width: 100%; height: 25%; border-radius: 50%; background-color: var(--uib-color); }
-        .newtons-cradle__dot:first-child { animation: swing var(--uib-speed) linear infinite; }
-        .newtons-cradle__dot:last-child { animation: swing2 var(--uib-speed) linear infinite; }
-        @keyframes swing { 0% { transform: rotate(0deg); animation-timing-function: ease-out; } 25% { transform: rotate(70deg); animation-timing-function: ease-in; } 50% { transform: rotate(0deg); animation-timing-function: linear; } }
-        @keyframes swing2 { 0% { transform: rotate(0deg); animation-timing-function: linear; } 50% { transform: rotate(0deg); animation-timing-function: ease-out; } 75% { transform: rotate(-70deg); animation-timing-function: ease-in; } }
-        .loading-text { margin-top: 20px; color: fuchsia; font-size: 14px; letter-spacing: 1px; }
         #screen-terminal { display: none; width: 100%; text-align: left; }
-        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; box-shadow: inset 0 0 10px #000; font-size: 13px; line-height: 1.5; color: #00ff66; word-wrap: break-word; }
+        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; font-size: 13px; line-height: 1.5; color: #00ff66; word-wrap: break-word; }
     </style>
 </head>
 <body>
     <div class="main-container">
         <div id="screen-welcome">
-            <div class="brand-title" style="font-size: 28px; color: #ff0055; margin-bottom: 30px; letter-spacing: 2px;">bloodthirsty</div>
+            <div class="brand-title" style="font-size: 28px; color: #ff0055; margin-bottom: 30px;">bloodthirsty</div>
             <button onclick="goToMenu()">НАЧАТЬ ПОИСК</button>
         </div>
         <div id="screen-menu">
-            <h2 style="font-size: 18px; margin-bottom: 20px; color: fuchsia;">КАТЕГОРИЯ ПОИСКА</h2>
-            <div class="search-type-container">
-                <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg', '@username')">Поиск по ТГ</div>
-                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '+70000000000')">Поиск по номеру</div>
-            </div>
-            <input placeholder="@username" class="input" type="text" id="main-search-input">
+            <input placeholder="Введите данные" class="input" type="text" id="main-search-input">
             <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
-            <div class="footer-note">данные находятся только по базам данных</div>
         </div>
         <div id="screen-loading">
-            <div class="newtons-cradle"><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div><div class="newtons-cradle__dot"></div></div>
-            <div class="loading-text">> Запуск osint.py...</div>
+            <div class="loading-text" style="color: fuchsia;">> Запуск osint.py...</div>
         </div>
         <div id="screen-terminal">
-            <h3 style="font-size: 14px; color: #666; margin-bottom: 10px;">OUTPUT LOGS (osint.py):</h3>
             <div class="terminal-box" id="terminal-output"></div>
             <button onclick="resetSystem()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
         </div>
     </div>
     <script>
         let db = [];
-        async function init() {
-            try {
-                const response = await fetch('csvjson.json');
-                db = await response.json();
-            } catch (e) { console.error("База не загружена"); }
-        }
-        init();
+        fetch('./csvjson.json')
+            .then(response => response.json())
+            .then(data => { db = data; console.log("Загружено:", db.length); })
+            .catch(e => console.error("Ошибка загрузки:", e));
 
-        let currentType = 'tg';
-        function changeSearchType(type, ph) {
-            currentType = type;
-            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${type}`).classList.add('active');
-            document.getElementById('main-search-input').placeholder = ph;
-        }
         function goToMenu() { document.getElementById('screen-welcome').style.display = 'none'; document.getElementById('screen-menu').style.display = 'block'; }
         function startLoading() {
-            if(!document.getElementById('main-search-input').value.trim()) return;
             document.getElementById('screen-menu').style.display = 'none';
             document.getElementById('screen-loading').style.display = 'flex';
-            setTimeout(runTerminalSimulation, 2000);
+            setTimeout(runTerminalSimulation, 1500);
         }
         function runTerminalSimulation() {
             document.getElementById('screen-loading').style.display = 'none';
             document.getElementById('screen-terminal').style.display = 'block';
-            const output = document.getElementById('terminal-output');
-            const target = document.getElementById('main-search-input').value.trim();
-            const cleanTarget = target.replace(/\D/g, '');
             
-            output.innerHTML = `[~] База: ${db.length} записей<br>[+] Поиск: "${target}"<br>`;
+            const input = document.getElementById('main-search-input').value.trim();
+            const output = document.getElementById('terminal-output');
+            const cleanInput = input.replace(/\D/g, '');
+            
+            output.innerHTML = `[~] База: ${db.length} записей<br>[+] Поиск: "${input}"<br>`;
             
             const found = db.find(item => {
-                return Object.values(item).some(val => {
-                    const strVal = String(val);
-                    if (cleanTarget.length > 3) return strVal.replace(/\D/g, '').includes(cleanTarget);
-                    return strVal.toLowerCase().includes(target.toLowerCase());
-                });
+                return Object.values(item).some(val => String(val).replace(/\D/g, '').includes(cleanInput));
             });
             
-            let logs = [];
             if (found) {
-                logs.push(`[🎯 ДАННЫЕ НАЙДЕНЫ]`);
-                for (let k in found) logs.push(`• ${k}: ${found[k]}`);
-            } else { logs.push(`[-] Совпадений не найдено.`); }
-            
-            let i = 0;
-            function print() {
-                if (i < logs.length) { output.innerHTML += logs[i] + '<br>'; i++; setTimeout(print, 400); }
-                else { document.getElementById('btn-restart').style.display = 'block'; }
+                output.innerHTML += `[🎯 ДАННЫЕ НАЙДЕНЫ]<br>`;
+                for (let k in found) output.innerHTML += `• ${k}: ${found[k]}<br>`;
+            } else {
+                output.innerHTML += `[-] Совпадений не найдено.`;
             }
-            print();
+            document.getElementById('btn-restart').style.display = 'block';
         }
         function resetSystem() { location.reload(); }
     </script>
