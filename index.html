@@ -62,7 +62,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
-        /* ===== ПОДПИСЬ РАЗРАБОТЧИКА ===== */
         .credit {
             color: #666;
             font-size: 10px;
@@ -142,15 +141,23 @@
             justify-content: center;
             align-items: center;
             background: #0a0a0a;
-            gap: 20px;
+            gap: 5px;
         }
         .loader-text {
             color: #8B0000;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-top: 10px;
+            text-shadow: 0 0 30px rgba(139, 0, 0, 0.4);
+            animation: none;
+        }
+        .loader-subtext {
+            color: #666;
+            font-size: 11px;
             letter-spacing: 2px;
-            opacity: 0.9;
-            text-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
-            animation: none; /* Убираем тряску */
+            margin-top: 5px;
+            opacity: 0.7;
         }
         /* ===== ТЕРМИНАЛ ===== */
         #screen-terminal {
@@ -176,7 +183,6 @@
         .terminal-dot.red { background: #ff1a1a; }
         .terminal-dot.yellow { background: #ffcc00; }
         .terminal-dot.green { background: #00ff41; }
-        /* ===== КАРТОЧКА ТЕРМИНАЛА ===== */
         .terminal-card {
             padding: 0.5rem;
             overflow: hidden;
@@ -207,25 +213,13 @@
             white-space: pre-wrap;
             word-break: break-all;
         }
-        .terminal-body .line {
-            opacity: 0;
-            animation: type 0.3s forwards;
-        }
-        @keyframes type {
-            0% { opacity: 0; transform: translateX(-10px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
         .terminal-body .highlight {
             color: #ff1a1a;
             font-weight: bold;
         }
-        .terminal-body .found {
-            color: #ffcc00;
-        }
         .terminal-body::-webkit-scrollbar { width: 4px; }
         .terminal-body::-webkit-scrollbar-track { background: #0a0a0a; }
         .terminal-body::-webkit-scrollbar-thumb { background: #ff1a1a; border-radius: 2px; }
-        /* ===== КНОПКА НАЗАД ===== */
         .btn-back {
             background: transparent;
             border: none;
@@ -428,10 +422,8 @@
             <button class="btn btn-search" id="btnSearch">ЗАПУСТИТЬ</button>
         </div>
 
-        <!-- ЭКРАН ЗАГРУЗКИ -->
+        <!-- ЭКРАН ЗАГРУЗКИ (ИСПРАВЛЕННЫЙ) -->
         <div id="screen-loading" class="screen">
-            <!-- ТЕПЕРЬ ТЕКСТ НЕ ТРЯСЁТСЯ -->
-            <div class="loader-text">> ЗАПУСК osint.py ...</div>
             <div class="loader" id="loadingEye">
                 <div class="head"></div>
                 <div class="flames">
@@ -446,7 +438,8 @@
                 </div>
                 <div class="eye"></div>
             </div>
-            <div style="color:#666;font-size:11px;letter-spacing:2px;">ЗАГРУЗКА БАЗЫ...</div>
+            <div class="loader-text">ЗАПУСК</div>
+            <div class="loader-subtext">ЗАГРУЗКА БАЗЫ...</div>
         </div>
 
         <!-- ЭКРАН ТЕРМИНАЛА -->
@@ -640,7 +633,7 @@
     }
 
     // ============================================================
-    // 5. ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
+    // 5. ПЕЧАТАЮЩИЙСЯ ТЕКСТ
     // ============================================================
     async function typeText(element, text) {
         return new Promise((resolve) => {
