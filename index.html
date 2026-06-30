@@ -55,19 +55,28 @@
             color: #ff1a1a;
             text-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
             letter-spacing: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
-        .subtitle {
-            color: #aa3333;
-            font-size: 14px;
-            letter-spacing: 6px;
-            margin-bottom: 40px;
+        /* ===== ПОДПИСЬ РАЗРАБОТЧИКА ===== */
+        .credit {
+            color: #666;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            margin-bottom: 30px;
             opacity: 0.7;
+        }
+        .credit span {
+            color: #8B0000;
+        }
+        .credit .tg {
+            color: #aa3333;
         }
         .btn {
             background: transparent;
@@ -133,44 +142,21 @@
             justify-content: center;
             align-items: center;
             background: #0a0a0a;
-            gap: 30px;
+            gap: 20px;
         }
         .loader-text {
-            color: #00ff41;
+            color: #8B0000;
             font-size: 14px;
             letter-spacing: 2px;
-            opacity: 0.8;
+            opacity: 0.9;
             animation: blink 1.2s infinite;
+            text-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
         }
         @keyframes blink {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
-        .newton-cradle {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            height: 60px;
-            align-items: flex-end;
-        }
-        .ball {
-            width: 14px;
-            height: 14px;
-            background: #ff1a1a;
-            border-radius: 50%;
-            animation: swing 1.2s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
-        }
-        .ball:nth-child(1) { animation-delay: 0s; }
-        .ball:nth-child(2) { animation-delay: 0.15s; }
-        .ball:nth-child(3) { animation-delay: 0.3s; }
-        .ball:nth-child(4) { animation-delay: 0.45s; }
-        .ball:nth-child(5) { animation-delay: 0.6s; }
-        @keyframes swing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
-        }
-        /* ===== ТЕРМИНАЛ (НОВЫЙ ДИЗАЙН) ===== */
+        /* ===== ТЕРМИНАЛ ===== */
         #screen-terminal {
             padding: 15px;
             background: #0a0a0a;
@@ -194,7 +180,7 @@
         .terminal-dot.red { background: #ff1a1a; }
         .terminal-dot.yellow { background: #ffcc00; }
         .terminal-dot.green { background: #00ff41; }
-        /* ===== КАРТОЧКА ТЕРМИНАЛА (НОВЫЙ ВЫВОД) ===== */
+        /* ===== КАРТОЧКА ТЕРМИНАЛА ===== */
         .terminal-card {
             padding: 0.5rem;
             overflow: hidden;
@@ -266,9 +252,15 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            background: #2f3640;
+            background: #0a0a0a;
             border-radius: 50px;
             position: relative;
+            border: 1px solid #1a1a1a;
+            transition: all 0.3s ease;
+        }
+        .searchBox:focus-within {
+            border-color: #8B0000;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
         }
         .searchButton {
             color: white;
@@ -294,16 +286,16 @@
         }
         .searchInput {
             border: none;
-            background: none;
+            background: transparent;
             outline: none;
-            color: white;
+            color: #00ff41;
             font-size: 15px;
             padding: 24px 46px 24px 26px;
             width: 100%;
             font-family: 'Courier New', monospace;
         }
         .searchInput::placeholder {
-            color: #888;
+            color: #444;
         }
         /* ===== ГЛАЗ С ПЛАМЕНЕМ ===== */
         .loader {
@@ -401,17 +393,13 @@
             50% { opacity: 0.8; }
             100% { opacity: 0.3; }
         }
-        /* ===== SCROLLBAR ===== */
-        .terminal-body::-webkit-scrollbar { width: 4px; }
-        .terminal-body::-webkit-scrollbar-track { background: #0a0a0a; }
-        .terminal-body::-webkit-scrollbar-thumb { background: #ff1a1a; border-radius: 2px; }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- ЭКРАН ПРИВЕТСТВИЯ -->
         <div id="screen-welcome" class="screen active">
-            <!-- ГЛАЗ С ПЛАМЕНЕМ ВМЕСТО КУБА -->
+            <!-- ГЛАЗ С ПЛАМЕНЕМ -->
             <div class="loader" id="eyeLoader">
                 <div class="head"></div>
                 <div class="flames">
@@ -427,7 +415,10 @@
                 <div class="eye"></div>
             </div>
             <div class="logo">BLOODTHIRSTY</div>
-            <div class="subtitle">OSINT SIMULATOR</div>
+            <!-- ПОДПИСЬ РАЗРАБОТЧИКА -->
+            <div class="credit">
+                Developer: <span>doxmann</span> &nbsp;|&nbsp; TG: <span class="tg">@bl0odthirstly</span>
+            </div>
             <button class="btn" id="btnStart">НАЧАТЬ ПОИСК</button>
         </div>
 
@@ -446,9 +437,20 @@
         <!-- ЭКРАН ЗАГРУЗКИ -->
         <div id="screen-loading" class="screen">
             <div class="loader-text">> ЗАПУСК osint.py ...</div>
-            <div class="newton-cradle">
-                <div class="ball"></div><div class="ball"></div><div class="ball"></div>
-                <div class="ball"></div><div class="ball"></div>
+            <!-- ГЛАЗ С ПЛАМЕНЕМ (ВМЕСТО ШАРИКОВ) -->
+            <div class="loader" id="loadingEye">
+                <div class="head"></div>
+                <div class="flames">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+                <div class="eye"></div>
             </div>
             <div style="color:#666;font-size:11px;letter-spacing:2px;">ЗАГРУЗКА БАЗЫ...</div>
         </div>
@@ -559,7 +561,7 @@
     }
 
     // ============================================================
-    // 4. ПОИСК (НОВАЯ ВЕРСИЯ С ПЕЧАТАЮЩИМСЯ ТЕКСТОМ)
+    // 4. ПОИСК (С ПЕЧАТАЮЩИМСЯ ТЕКСТОМ)
     // ============================================================
     async function runTerminalSimulation() {
         if (fullDatabase.length === 0) {
@@ -578,23 +580,17 @@
             return;
         }
 
-        // Очищаем вывод и показываем процесс
         output.innerHTML = '';
-        
-        // Анимация печати "Поиск..."
         await typeText(output, '[>] Поиск...\n');
         
-        // Очищаем ввод от всего, кроме цифр (для номеров)
         const cleanInput = query.replace(/\D/g, '');
         const lowerQuery = query.toLowerCase();
         
-        // Ищем ВСЕ совпадения
         const results = fullDatabase.filter(item => {
             return Object.values(item).some(val => {
                 const strVal = String(val);
                 const cleanVal = strVal.replace(/\D/g, '');
                 
-                // 1️⃣ ПОИСК ПО НОМЕРУ
                 if (cleanInput.length > 0 && cleanVal.length > 0) {
                     if (cleanVal.includes(cleanInput)) return true;
                     if (cleanInput.length >= 10 && cleanVal.length >= 10) {
@@ -604,11 +600,9 @@
                     }
                 }
                 
-                // 2️⃣ ПОИСК ПО ТЕКСТУ
                 if (strVal.toLowerCase() === lowerQuery) return true;
                 if (strVal.toLowerCase().includes(lowerQuery)) return true;
                 
-                // 3️⃣ ПОИСК ПО СЛОВАМ
                 const words = lowerQuery.split(/\s+/);
                 for (const word of words) {
                     if (word.length > 2 && strVal.toLowerCase().includes(word)) {
@@ -627,7 +621,6 @@
             return;
         }
         
-        // Формируем вывод с анимацией
         await typeText(output, '[+] НАЙДЕНО: ' + results.length + ' записей\n');
         await sleep(150);
         
@@ -642,14 +635,12 @@
                 return `<span style="color:#00ff41;">${key}:</span> ${displayVal}`;
             });
             const line = `[${index + 1}] ` + parts.join(' | ') + '\n';
-            // Добавляем строку с задержкой
             setTimeout(() => {
                 output.innerHTML += line;
                 output.scrollTop = output.scrollHeight;
             }, 100 * (index + 1));
         });
         
-        // Финальная строка
         setTimeout(() => {
             output.innerHTML += '\n[>] Поиск завершён.';
             output.scrollTop = output.scrollHeight;
@@ -657,7 +648,7 @@
     }
 
     // ============================================================
-    // 5. ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
+    // 5. ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА (МЕДЛЕННЕЕ)
     // ============================================================
     async function typeText(element, text) {
         return new Promise((resolve) => {
@@ -678,7 +669,7 @@
                     clearInterval(interval);
                     resolve();
                 }
-            }, 25); // скорость печати
+            }, 50);
         });
     }
 
