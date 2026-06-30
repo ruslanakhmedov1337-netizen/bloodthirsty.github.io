@@ -149,12 +149,8 @@
             font-size: 14px;
             letter-spacing: 2px;
             opacity: 0.9;
-            animation: blink 1.2s infinite;
             text-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+            animation: none; /* Убираем тряску */
         }
         /* ===== ТЕРМИНАЛ ===== */
         #screen-terminal {
@@ -245,7 +241,7 @@
             margin-top: 10px;
         }
         .btn-back:active { color: #ff1a1a; }
-        /* ===== ПОЛЕ ПОИСКА (НОВЫЙ ДИЗАЙН) ===== */
+        /* ===== ПОЛЕ ПОИСКА ===== */
         .searchBox {
             display: flex;
             max-width: 100%;
@@ -399,7 +395,6 @@
     <div id="app">
         <!-- ЭКРАН ПРИВЕТСТВИЯ -->
         <div id="screen-welcome" class="screen active">
-            <!-- ГЛАЗ С ПЛАМЕНЕМ -->
             <div class="loader" id="eyeLoader">
                 <div class="head"></div>
                 <div class="flames">
@@ -415,7 +410,6 @@
                 <div class="eye"></div>
             </div>
             <div class="logo">BLOODTHIRSTY</div>
-            <!-- ПОДПИСЬ РАЗРАБОТЧИКА -->
             <div class="credit">
                 Developer: <span>doxmann</span> &nbsp;|&nbsp; TG: <span class="tg">@bl0odthirstly</span>
             </div>
@@ -436,8 +430,8 @@
 
         <!-- ЭКРАН ЗАГРУЗКИ -->
         <div id="screen-loading" class="screen">
+            <!-- ТЕПЕРЬ ТЕКСТ НЕ ТРЯСЁТСЯ -->
             <div class="loader-text">> ЗАПУСК osint.py ...</div>
-            <!-- ГЛАЗ С ПЛАМЕНЕМ (ВМЕСТО ШАРИКОВ) -->
             <div class="loader" id="loadingEye">
                 <div class="head"></div>
                 <div class="flames">
@@ -464,7 +458,6 @@
                 <span style="flex:1;text-align:center;">osint.py — TARGET</span>
             </div>
             <div style="padding:10px 0;background:#0a0a0a;">
-                <!-- НОВОЕ ПОЛЕ ПОИСКА С ЛУПОЙ -->
                 <div class="searchBox">
                     <input class="searchInput" id="main-search-input" type="text" placeholder="Введите ник/номер/ФИО/email...">
                     <button class="searchButton" id="btnRunSearch">
@@ -492,7 +485,6 @@
                         </svg>
                     </button>
                 </div>
-                <!-- НОВЫЙ ТЕРМИНАЛЬНЫЙ ВЫВОД -->
                 <div class="terminal-card">
                     <div class="terminal-wrap">
                         <div class="terminal-body" id="terminal-output">
@@ -561,7 +553,7 @@
     }
 
     // ============================================================
-    // 4. ПОИСК (С ПЕЧАТАЮЩИМСЯ ТЕКСТОМ)
+    // 4. ПОИСК
     // ============================================================
     async function runTerminalSimulation() {
         if (fullDatabase.length === 0) {
@@ -648,7 +640,7 @@
     }
 
     // ============================================================
-    // 5. ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА (МЕДЛЕННЕЕ)
+    // 5. ФУНКЦИЯ ПЕЧАТАЮЩЕГОСЯ ТЕКСТА
     // ============================================================
     async function typeText(element, text) {
         return new Promise((resolve) => {
