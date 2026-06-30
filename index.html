@@ -82,7 +82,6 @@
         let db = [];
         fetch('csvjson.json').then(r => r.json()).then(data => db = data);
         let currentType = 'tg';
-
         function changeSearchType(type, ph) {
             currentType = type;
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
@@ -101,19 +100,14 @@
             document.getElementById('screen-terminal').style.display = 'block';
             const output = document.getElementById('terminal-output');
             const target = document.getElementById('main-search-input').value.trim();
+            const cleanTarget = target.replace(/\D/g, '');
             output.innerHTML = '';
             
-            // УНИВЕРСАЛЬНЫЙ ПОИСК: ищем во всех полях базы
             const found = db.find(item => {
                 return Object.values(item).some(val => {
-                    const strVal = String(val).trim();
-                    const targetClean = target.replace(/\D/g, '');
-                    const valClean = strVal.replace(/\D/g, '');
-                    
-                    // Если ввод - цифры (телефон), сравниваем их без учета спецсимволов
-                    if (/^\d+$/.test(target)) return valClean === targetClean;
-                    // Иначе ищем точное текстовое совпадение
-                    return strVal.toLowerCase() === target.toLowerCase();
+                    const strVal = String(val);
+                    if (currentType === 'phone') return strVal.replace(/\D/g, '').includes(cleanTarget);
+                    return strVal.toLowerCase().includes(target.toLowerCase());
                 });
             });
             
