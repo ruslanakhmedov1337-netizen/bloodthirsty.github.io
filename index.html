@@ -82,6 +82,7 @@
         let db = [];
         fetch('csvjson.json').then(r => r.json()).then(data => db = data);
         let currentType = 'tg';
+
         function changeSearchType(type, ph) {
             currentType = type;
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
@@ -101,17 +102,17 @@
             const output = document.getElementById('terminal-output');
             const target = document.getElementById('main-search-input').value.trim();
             const cleanTarget = target.replace(/\D/g, '');
-            output.innerHTML = '';
+            output.innerHTML = `[~] Инициализация...<br>[~] Загружено записей: ${db.length}<br>`;
             
             const found = db.find(item => {
                 return Object.values(item).some(val => {
                     const strVal = String(val);
-                    if (currentType === 'phone') return strVal.replace(/\D/g, '').includes(cleanTarget);
+                    if (cleanTarget.length > 0) return strVal.replace(/\D/g, '').includes(cleanTarget);
                     return strVal.toLowerCase().includes(target.toLowerCase());
                 });
             });
             
-            let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск: "${target}"`];
+            let logs = [`[+] Поиск: "${target}"`];
             if (found) {
                 logs.push(`[🎯 ДАННЫЕ НАЙДЕНЫ]`);
                 for (let k in found) logs.push(`• ${k}: ${found[k]}`);
