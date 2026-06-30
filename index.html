@@ -425,7 +425,6 @@
             throw new Error('Пустая база');
         } catch (e) {
             console.warn('Ошибка загрузки базы:', e);
-            // Резервная база (чтобы сайт работал)
             fullDatabase = [
                 { name: 'Тестовый пользователь', phone: '79001234567', tg: '@test', email: 'test@mail.ru' },
                 { name: 'Иванов Иван', phone: '79161234567', tg: '@ivanov', email: 'ivan@mail.ru' },
@@ -469,18 +468,27 @@
                 const strVal = String(val);
                 const cleanVal = strVal.replace(/\D/g, '');
                 
-                // 1. Поиск по очищенным цифрам (для номеров)
+                // 1️⃣ ПОИСК ПО НОМЕРУ (СРАВНЕНИЕ ОЧИЩЕННЫХ ЦИФР)
                 if (cleanInput.length > 0 && cleanVal.length > 0) {
+                    // Проверяем, входит ли очищенный запрос в очищенное значение
                     if (cleanVal.includes(cleanInput)) return true;
+                    
+                    // Если номер начинается с 7, а запрос с 8 — или наоборот
+                    if (cleanInput.length >= 10 && cleanVal.length >= 10) {
+                        // Сравниваем последние 10 цифр (без кода страны)
+                        const inputLast10 = cleanInput.slice(-10);
+                        const valLast10 = cleanVal.slice(-10);
+                        if (inputLast10 === valLast10) return true;
+                    }
                 }
                 
-                // 2. Поиск по точному совпадению (без учёта регистра)
+                // 2️⃣ ПОИСК ПО ТЕКСТУ (БЕЗ УЧЁТА РЕГИСТРА)
                 if (strVal.toLowerCase() === lowerQuery) return true;
                 
-                // 3. Поиск по частичному совпадению (содержит подстроку)
+                // 3️⃣ ПОИСК ПО ЧАСТИ ТЕКСТА
                 if (strVal.toLowerCase().includes(lowerQuery)) return true;
                 
-                // 4. Поиск по отдельным словам (для ФИО)
+                // 4️⃣ ПОИСК ПО СЛОВАМ (ДЛЯ ФИО)
                 const words = lowerQuery.split(/\s+/);
                 for (const word of words) {
                     if (word.length > 2 && strVal.toLowerCase().includes(word)) {
