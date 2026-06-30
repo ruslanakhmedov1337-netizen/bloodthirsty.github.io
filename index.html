@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
-        /* Твои стили сохранены полностью */
+        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ */
         body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
         .main-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         button, .btn-style { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: box-shadow ease-in-out 0.3s, background-color ease-in-out 0.1s, letter-spacing ease-in-out 0.1s, transform ease-in-out 0.1s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
@@ -70,11 +70,12 @@
             <h2 style="font-size: 18px; margin-bottom: 20px; color: fuchsia;">КАТЕГОРИЯ ПОИСКА</h2>
             <div class="search-type-container">
                 <div class="type-btn active" id="btn-tg" onclick="changeSearchType('tg', '@username в Telegram')">Поиск по ТГ</div>
-                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '380...')">Поиск по номеру</div>
+                <div class="type-btn" id="btn-phone" onclick="changeSearchType('phone', '+7 (999) 000-00-00')">Поиск по номеру</div>
+                <div class="type-btn" id="btn-fio" onclick="changeSearchType('fio', 'Иванов Иван Иванович')">Поиск по ФИО</div>
             </div>
             <input placeholder="@username в Telegram" class="input" type="text" id="main-search-input">
             <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
-            <div class="footer-note">данные находятся только по базам данных</div>
+            <div class="footer-note">данные находятся только по базам данных в скором времени их будет больше</div>
         </div>
         <div id="screen-loading">
             <div class="newtons-cradle">
@@ -88,61 +89,45 @@
             <button onclick="resetSystem()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
         </div>
     </div>
-
     <script>
-        let fullDatabase = [];
-        // Загружаем твою базу
-        fetch('csvjson.json').then(r => r.json()).then(data => fullDatabase = data);
+        let db = [];
+        fetch('csvjson.json').then(r => r.json()).then(data => db = data);
         let currentType = 'tg';
 
-        function changeSearchType(type, placeholder) {
+        function changeSearchType(type, placeholderText) {
             currentType = type;
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${type}`).classList.add('active');
-            document.getElementById('main-search-input').placeholder = placeholder;
+            document.getElementById('main-search-input').placeholder = placeholderText;
+            document.getElementById('main-search-input').value = '';
         }
-
         function goToMenu() { document.getElementById('screen-welcome').style.display = 'none'; document.getElementById('screen-menu').style.display = 'block'; }
-        
         function startLoading() {
-            if(!document.getElementById('main-search-input').value.trim()) return;
+            if(!document.getElementById('main-search-input').value.trim()) { alert("Ошибка!"); return; }
             document.getElementById('screen-menu').style.display = 'none';
             document.getElementById('screen-loading').style.display = 'flex';
-            setTimeout(runTerminalSimulation, 2000);
+            setTimeout(runTerminalSimulation, 3000);
         }
-
         function runTerminalSimulation() {
             document.getElementById('screen-loading').style.display = 'none';
             document.getElementById('screen-terminal').style.display = 'block';
             const output = document.getElementById('terminal-output');
             const target = document.getElementById('main-search-input').value.trim();
             output.innerHTML = '';
-            
-            // Ищем данные
-            const found = fullDatabase.find(item => String(item.phone) === target);
-            
-            let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск по: "${target}"`];
+            const found = db.find(item => String(item.phone) === target);
+            let logs = [`[~] Подключение к osint_base.db...`, `[+] Поиск: "${target}"`];
             if (found) {
                 logs.push(`[🎯 ДАННЫЕ НАЙДЕНЫ]`);
-                for (let key in found) { logs.push(`• ${key}: ${found[key]}`); }
-            } else {
-                logs.push(`[-] Совпадений не найдено.`);
-            }
+                for (let k in found) logs.push(`• ${k}: ${found[k]}`);
+            } else { logs.push(`[-] Совпадений не найдено.`); }
             logs.push(`[SUCCESS] Скрипт успешно завершил работу.`);
-
-            let index = 0;
-            function printLine() {
-                if (index < logs.length) {
-                    output.innerHTML += logs[index] + '<br>';
-                    index++;
-                    setTimeout(printLine, 400);
-                } else {
-                    document.getElementById('btn-restart').style.display = 'block';
-                }
+            let i = 0;
+            function print() {
+                if (i < logs.length) { output.innerHTML += logs[i] + '<br>'; i++; setTimeout(print, 400); }
+                else { document.getElementById('btn-restart').style.display = 'block'; }
             }
-            printLine();
+            print();
         }
-
         function resetSystem() { location.reload(); }
     </script>
 </body>
