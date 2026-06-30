@@ -438,7 +438,7 @@
     }
 
     // ============================================================
-    // 5. ПОИСК
+    // 5. ПОИСК (ОБНОВЛЁННАЯ ВЕРСИЯ)
     // ============================================================
     async function runTerminalSimulation() {
         if (fullDatabase.length === 0) {
@@ -459,31 +459,64 @@
 
         output.innerHTML = '[>] Поиск...\n';
         
-        // Очищаем ввод от всего, кроме цифр
+        // Очищаем ввод от всего, кроме цифр (для номеров)
         const cleanInput = query.replace(/\D/g, '');
+        const lowerQuery = query.toLowerCase();
         
-        // Ищем в базе
-        const found = fullDatabase.find(item => {
+        // Ищем ВСЕ совпадения
+        const results = fullDatabase.filter(item => {
             return Object.values(item).some(val => {
-                const dbValue = String(val).replace(/\D/g, '');
-                if (cleanInput.length > 0 && dbValue.length > 0) {
-                    return dbValue.includes(cleanInput);
+                const strVal = String(val);
+                const cleanVal = strVal.replace(/\D/g, '');
+                
+                // 1. Поиск по очищенным цифрам (для номеров)
+                if (cleanInput.length > 0 && cleanVal.length > 0) {
+                    if (cleanVal.includes(cleanInput)) return true;
                 }
-                return String(val).toLowerCase() === query.toLowerCase();
+                
+                // 2. Поиск по точному совпадению (без учёта регистра)
+                if (strVal.toLowerCase() === lowerQuery) return true;
+                
+                // 3. Поиск по частичному совпадению (содержит подстроку)
+                if (strVal.toLowerCase().includes(lowerQuery)) return true;
+                
+                // 4. Поиск по отдельным словам (для ФИО)
+                const words = lowerQuery.split(/\s+/);
+                for (const word of words) {
+                    if (word.length > 2 && strVal.toLowerCase().includes(word)) {
+                        return true;
+                    }
+                }
+                
+                return false;
             });
         });
         
         await sleep(300);
         
-        if (found) {
-            let resultHtml = '[+] ДАННЫЕ НАЙДЕНЫ:<br>';
-            for (let key in found) {
-                resultHtml += `• ${key}: ${found[key]}<br>`;
-            }
-            output.innerHTML = resultHtml;
-        } else {
+        if (results.length === 0) {
             output.innerHTML = `[-] Совпадений по запросу "${query}" не найдено.`;
+            return;
         }
+        
+        // Формируем вывод
+        let resultHtml = `[+] НАЙДЕНО: ${results.length} записей<br><br>`;
+        results.forEach((item, index) => {
+            resultHtml += `<span style="color:#ffcc00;">[${index + 1}]</span> `;
+            const entries = Object.entries(item);
+            const parts = entries.map(([key, val]) => {
+                // Подсвечиваем совпадения
+                let displayVal = String(val);
+                if (displayVal.toLowerCase().includes(lowerQuery)) {
+                    const regex = new RegExp(`(${lowerQuery})`, 'gi');
+                    displayVal = displayVal.replace(regex, '<span style="color:#ff1a1a;font-weight:bold;">$1</span>');
+                }
+                return `<span style="color:#00ff41;">${key}:</span> ${displayVal}`;
+            });
+            resultHtml += parts.join(' | ') + '<br>';
+        });
+        
+        output.innerHTML = resultHtml;
     }
 
     function sleep(ms) {
