@@ -5,72 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bloodthirsty // OSINT SYSTEM</title>
     <style>
-        body { background-color: #1a1a1a; color: #ffffff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
-        .main-container { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        button { --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; --accent: fuchsia; font-weight: bold; letter-spacing: 0.1em; border: none; border-radius: 1.1em; background-color: #212121; cursor: pointer; color: white; padding: 1em 2em; transition: box-shadow 0.3s, transform 0.1s; box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; font-family: monospace; font-size: 15px; margin-top: 20px; }
-        button:hover { box-shadow: var(--hover-shadows); }
-        button:active { background-color: var(--accent); transform: scale(0.95); }
-        .input { margin: 15px auto; background: none; border: none; outline: none; width: 100%; max-width: 260px; padding: 12px 20px; font-size: 16px; border-radius: 9999px; box-shadow: inset 2px 5px 10px rgb(5, 5, 5); color: #fff; text-align: center; display: block; }
-        #screen-menu { display: none; width: 100%; }
-        #screen-loading { display: none; flex-direction: column; align-items: center; }
-        #screen-terminal { display: none; width: 100%; text-align: left; }
-        .terminal-box { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; padding: 20px; min-height: 200px; font-size: 13px; line-height: 1.5; color: #00ff66; word-wrap: break-word; }
-    </style>
-</head>
-<body>
-    <div class="main-container">
-        <div id="screen-welcome">
-            <div class="brand-title" style="font-size: 28px; color: #ff0055; margin-bottom: 30px;">bloodthirsty</div>
-            <button onclick="goToMenu()">НАЧАТЬ ПОИСК</button>
-        </div>
-        <div id="screen-menu">
-            <input placeholder="Введите данные" class="input" type="text" id="main-search-input">
-            <button onclick="startLoading()">ЗАПУСТИТЬ ИНДЕКСАЦИЮ</button>
-        </div>
-        <div id="screen-loading">
-            <div class="loading-text" style="color: fuchsia;">> Запуск osint.py...</div>
-        </div>
-        <div id="screen-terminal">
-            <div class="terminal-box" id="terminal-output"></div>
-            <button onclick="resetSystem()" style="width: 100%; display: none;" id="btn-restart">СБРОСИТЬ СИСТЕМУ</button>
-        </div>
-    </div>
-    <script>
-        let db = [];
-        fetch('./csvjson.json')
-            .then(response => response.json())
-            .then(data => { db = data; console.log("Загружено:", db.length); })
-            .catch(e => console.error("Ошибка загрузки:", e));
+        body { 
+            background-color: #1a1a1a; 
+            color: #ffffff; 
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            overflow-x: hidden; 
+        }
+        .main-container { 
+            width: 100%; 
+            max-width: 500px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+        }
+        button { 
+            --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; 
+            --accent: fuchsia; 
+            font-weight: bold; 
+            letter-spacing: 0.1em; 
+            border: none; 
+            border-radius: 1.1em; 
+            background-color: #212121; 
+            cursor: pointer; 
+            color: white; 
+            padding: 1em 2em; 
+            transition: box-shadow 0.3s, transform 0.1s; 
+            box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; 
+            font-family: monospace; 
+            font-size: 15px; 
+            margin-top: 20px; 
+        }
+        button:hover { 
+            box-shadow: var(--hover-shadows); 
+        }
+        button:active { 
+            background-color: var(--accent); 
+            transform: scale(0.95); 
+        }
+        .input { 
+            margin: 15px auto; 
+            background: none; 
+            border: none; 
+            outline: none; 
+            width: 100%; 
+            max-width: 260px; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            border-radius: 9999px; 
+            box-shadow: inset 2px 5px 10px rgb(5, 5, 5); 
+            color: #fff; 
+            text-align: center; 
+            display: block; 
+        }
+        #screen-menu { 
+            display: none; 
+            width: 100%; 
+        }
+        #screen-loading { 
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .loading-text {
+            color: fuchsia;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+        #screen-terminal { 
+            display: none; 
+            width: 100%; 
+            text-align: left; 
+        }
+        .terminal-box { 
+            background-color: #0d0d0d; 
+            border: 1px solid #333; 
+            border-radius: 12px; 
+            padding: 20px; 
+            min-height: 200px; 
+            font-size: 13px; 
+            line-height: 1.5; 
+            color: #00ff66; 
+            word-wrap: break-word; 
+        }
 
-        function goToMenu() { document.getElementById('screen-welcome').style.display = 'none'; document.getElementById('screen-menu').style.display = 'block'; }
-        function startLoading() {
-            document.getElementById('screen-menu').style.display = 'none';
-            document.getElementById('screen-loading').style.display = 'flex';
-            setTimeout(runTerminalSimulation, 1500);
+        /* ПОЛНЫЙ ОРИГИНАЛЬНЫЙ БЛОК АНИМАЦИИ И СТИЛЕЙ ПРИЗРАКА */
+        .brand-header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px; 
         }
-        function runTerminalSimulation() {
-            document.getElementById('screen-loading').style.display = 'none';
-            document.getElementById('screen-terminal').style.display = 'block';
-            
-            const input = document.getElementById('main-search-input').value.trim();
-            const output = document.getElementById('terminal-output');
-            const cleanInput = input.replace(/\D/g, '');
-            
-            output.innerHTML = `[~] База: ${db.length} записей<br>[+] Поиск: "${input}"<br>`;
-            
-            const found = db.find(item => {
-                return Object.values(item).some(val => String(val).replace(/\D/g, '').includes(cleanInput));
-            });
-            
-            if (found) {
-                output.innerHTML += `[🎯 ДАННЫЕ НАЙДЕНЫ]<br>`;
-                for (let k in found) output.innerHTML += `• ${k}: ${found[k]}<br>`;
-            } else {
-                output.innerHTML += `[-] Совпадений не найдено.`;
-            }
-            document.getElementById('btn-restart').style.display = 'block';
+        .brand-title { 
+            font-size: 28px; 
+            font-weight: bold; 
+            color: #ff0055; 
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); 
+            letter-spacing: 2px; 
         }
-        function resetSystem() { location.reload(); }
-    </script>
-</body>
-</html>
+        #ghost { 
+            position: relative; 
+            scale: 0.35; 
+            width: 140px; 
+            height: 140px; 
+            margin: -40px; 
+        }
+        #red { 
+            animation: upNDown infinite 0.5s; 
+            position: relative; 
+            width: 140px; 
+            height: 140px; 
+            display: grid; 
+            grid-template-columns: repeat(14, 1fr); 
+            grid-template-rows: repeat(14, 1fr); 
+            grid-template-areas: 
+                "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14" 
+                "b1 b2 b3 top1 top
