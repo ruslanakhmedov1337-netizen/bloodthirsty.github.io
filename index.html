@@ -1,133 +1,112 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bloodthirsty // OSINT SYSTEM</title>
-    <style>
-        body { 
-            background-color: #1a1a1a; 
-            color: #ffffff; 
-            font-family: 'Courier New', monospace; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px; 
-            box-sizing: border-box; 
-            overflow-x: hidden; 
-        }
-        .main-container { 
-            width: 100%; 
-            max-width: 500px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-        }
-        button { 
-            --hover-shadows: 10px 10px 20px #121212, -10px -10px 20px #2a2a2a; 
-            --accent: fuchsia; 
-            font-weight: bold; 
-            letter-spacing: 0.1em; 
-            border: none; 
-            border-radius: 1.1em; 
-            background-color: #212121; 
-            cursor: pointer; 
-            color: white; 
-            padding: 1em 2em; 
-            transition: box-shadow 0.3s, transform 0.1s; 
-            box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828; 
-            font-family: monospace; 
-            font-size: 15px; 
-            margin-top: 20px; 
-        }
-        button:hover { 
-            box-shadow: var(--hover-shadows); 
-        }
-        button:active { 
-            background-color: var(--accent); 
-            transform: scale(0.95); 
-        }
-        .input { 
-            margin: 15px auto; 
-            background: none; 
-            border: none; 
-            outline: none; 
-            width: 100%; 
-            max-width: 260px; 
-            padding: 12px 20px; 
-            font-size: 16px; 
-            border-radius: 9999px; 
-            box-shadow: inset 2px 5px 10px rgb(5, 5, 5); 
-            color: #fff; 
-            text-align: center; 
-            display: block; 
-        }
-        #screen-menu { 
-            display: none; 
-            width: 100%; 
-        }
-        #screen-loading { 
-            display: none; 
-            flex-direction: column; 
-            align-items: center; 
-        }
-        .loading-text {
-            color: fuchsia;
-            font-size: 14px;
-            letter-spacing: 1px;
-            margin-top: 20px;
-        }
-        #screen-terminal { 
-            display: none; 
-            width: 100%; 
-            text-align: left; 
-        }
-        .terminal-box { 
-            background-color: #0d0d0d; 
-            border: 1px solid #333; 
-            border-radius: 12px; 
-            padding: 20px; 
-            min-height: 200px; 
-            font-size: 13px; 
-            line-height: 1.5; 
-            color: #00ff66; 
-            word-wrap: break-word; 
-        }
+// ============================================================
+// ГЛОБАЛЬНАЯ ПЕРЕМЕННАЯ ДЛЯ БАЗЫ
+// ============================================================
+let fullDatabase = [];
 
-        /* ПОЛНЫЙ ОРИГИНАЛЬНЫЙ БЛОК АНИМАЦИИ И СТИЛЕЙ ПРИЗРАКА */
-        .brand-header { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
-            margin-bottom: 30px; 
+// ============================================================
+// ЗАГРУЗКА БАЗЫ (С ФИКСОМ ДЛЯ iOS)
+// ============================================================
+async function loadDatabase() {
+    try {
+        // Принудительно добавляем параметр, чтобы избежать кэширования на iOS
+        const url = 'csvjson.json?_=' + Date.now();
+        const response = await fetch(url, {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache' }
+        });
+        
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        fullDatabase = await response.json();
+        
+        if (!Array.isArray(fullDatabase) || fullDatabase.length === 0) {
+            throw new Error('Пустая база');
         }
-        .brand-title { 
-            font-size: 28px; 
-            font-weight: bold; 
-            color: #ff0055; 
-            text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); 
-            letter-spacing: 2px; 
+        
+        console.log('[+] База загружена:', fullDatabase.length, 'записей');
+        return true;
+        
+    } catch (e) {
+        console.warn('Ошибка загрузки базы:', e);
+        
+        // РЕЗЕРВ: пробуем загрузить через raw.githubusercontent.com
+        try {
+            const fallbackUrl = 'https://raw.githubusercontent.com/ruslanakhmedov1337-netizen/bloodthirsty.github.io/main/csvjson.json?_=' + Date.now();
+            const resp2 = await fetch(fallbackUrl, { cache: 'no-store' });
+            if (resp2.ok) {
+                fullDatabase = await resp2.json();
+                console.log('[+] База загружена через резерв:', fullDatabase.length, 'записей');
+                return true;
+            }
+        } catch (e2) {
+            console.error('Резерв не сработал:', e2);
         }
-        #ghost { 
-            position: relative; 
-            scale: 0.35; 
-            width: 140px; 
-            height: 140px; 
-            margin: -40px; 
+        
+        // Если всё упало — создаём тестовую базу
+        fullDatabase = [
+            { name: 'Тест', phone: '79001234567', tg: '@test', email: 'test@mail.ru' },
+            { name: 'Иванов Иван', phone: '79161234567', tg: '@ivanov', email: 'ivan@mail.ru' }
+        ];
+        console.warn('[!] Используется тестовая база (файл не найден)');
+        return false;
+    }
+}
+
+// ============================================================
+// ТВОЯ ФУНКЦИЯ (С МАЛЕНЬКИМ ФИКСОМ)
+// ============================================================
+async function runTerminalSimulation() {
+    // Проверяем, загружена ли база
+    if (fullDatabase.length === 0) {
+        await loadDatabase();
+    }
+    
+    document.getElementById('screen-loading').style.display = 'none';
+    document.getElementById('screen-terminal').style.display = 'block';
+    
+    const input = document.getElementById('main-search-input').value.trim();
+    const output = document.getElementById('terminal-output');
+    
+    // Если ввод пустой — показываем подсказку
+    if (!input) {
+        output.innerHTML = '[-] Введите данные для поиска.';
+        document.getElementById('btn-restart').style.display = 'block';
+        return;
+    }
+    
+    // Очищаем ввод от всего, кроме цифр
+    const cleanInput = input.replace(/\D/g, '');
+    
+    // Ищем в базе: перебираем каждое поле каждого объекта
+    const found = fullDatabase.find(item => {
+        return Object.values(item).some(val => {
+            const dbValue = String(val).replace(/\D/g, '');
+            // Сравниваем очищенные строки (если это цифры)
+            if (cleanInput.length > 0 && dbValue.length > 0) {
+                return dbValue.includes(cleanInput);
+            }
+            // Иначе ищем по точному текстовому совпадению
+            return String(val).toLowerCase() === input.toLowerCase();
+        });
+    });
+    
+    if (found) {
+        let resultHtml = `[+] ДАННЫЕ НАЙДЕНЫ:<br>`;
+        for (let key in found) {
+            resultHtml += `• ${key}: ${found[key]}<br>`;
         }
-        #red { 
-            animation: upNDown infinite 0.5s; 
-            position: relative; 
-            width: 140px; 
-            height: 140px; 
-            display: grid; 
-            grid-template-columns: repeat(14, 1fr); 
-            grid-template-rows: repeat(14, 1fr); 
-            grid-template-areas: 
-                "a1 a2 a3 a4 a5 top0 top0 top0 top0 a10 a11 a12 a13 a14" 
-                "b1 b2 b3 top1 top
+        output.innerHTML = resultHtml;
+    } else {
+        output.innerHTML = `[-] Совпадений по запросу "${input}" не найдено.`;
+    }
+    document.getElementById('btn-restart').style.display = 'block';
+}
+
+// ============================================================
+// АВТОМАТИЧЕСКАЯ ЗАГРУЗКА БАЗЫ ПРИ СТАРТЕ
+// ============================================================
+// Вызываем загрузку при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    loadDatabase().then(success => {
+        console.log(success ? '✅ База готова' : '⚠️ База загружена с ошибками');
+    });
+});
