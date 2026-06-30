@@ -1,29 +1,3 @@
-<script>
-    let fullDatabase = [];
-
-    // Загрузка базы
-    async function loadDatabase() {
-        try {
-            const response = await fetch('csvjson.json'); 
-            fullDatabase = await response.json();
-            console.log("База загружена. Записей: " + fullDatabase.length);
-        } catch (e) {
-            console.error("Файл csvjson.json не найден!");
-        }
-    }
-    loadDatabase();
-
-    function goToMenu() {
-        document.getElementById('screen-welcome').style.display = 'none';
-        document.getElementById('screen-menu').style.display = 'block';
-    }
-
-    function startLoading() {
-        document.getElementById('screen-menu').style.display = 'none';
-        document.getElementById('screen-loading').style.display = 'flex';
-        setTimeout(runTerminalSimulation, 2000);
-    }
-
     function runTerminalSimulation() {
         document.getElementById('screen-loading').style.display = 'none';
         document.getElementById('screen-terminal').style.display = 'block';
@@ -31,21 +5,30 @@
         const input = document.getElementById('main-search-input').value.trim();
         const output = document.getElementById('terminal-output');
         
-        // Поиск по номеру (превращаем в число, если нужно, или ищем как строку)
-        const found = fullDatabase.find(item => String(item.phone) === input);
+        // Очищаем ввод от всего, кроме цифр
+        const cleanInput = input.replace(/\D/g, '');
+        
+        // Ищем в базе: перебираем каждое поле каждого объекта
+        const found = fullDatabase.find(item => {
+            return Object.values(item).some(val => {
+                const dbValue = String(val).replace(/\D/g, '');
+                // Сравниваем очищенные строки (если это цифры)
+                if (cleanInput.length > 0 && dbValue.length > 0) {
+                    return dbValue.includes(cleanInput);
+                }
+                // Иначе ищем по точному текстовому совпадению
+                return String(val).toLowerCase() === input.toLowerCase();
+            });
+        });
         
         if (found) {
-            output.innerHTML = `[+] ДАННЫЕ НАЙДЕНЫ:<br>
-            • ID: ${found["Telegram ID"] || '—'}<br>
-            • Имя: ${found["Имя"] || '—'}<br>
-            • Фамилия: ${found["Фамилия"] || '—'}<br>
-            • Телефон: ${found.phone}<br>
-            • Почта: ${found["Почта"] || '—'}`;
+            let resultHtml = `[+] ДАННЫЕ НАЙДЕНЫ:<br>`;
+            for (let key in found) {
+                resultHtml += `• ${key}: ${found[key]}<br>`;
+            }
+            output.innerHTML = resultHtml;
         } else {
-            output.innerHTML = `[-] Совпадений по номеру ${input} не найдено.`;
+            output.innerHTML = `[-] Совпадений по запросу "${input}" не найдено.`;
         }
         document.getElementById('btn-restart').style.display = 'block';
     }
-
-    function resetSystem() { location.reload(); }
-</script>
